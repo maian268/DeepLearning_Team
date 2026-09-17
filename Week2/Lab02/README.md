@@ -1,4 +1,4 @@
-Tuần 2_Lab02_Làm nhóm_Xây dựng và tinh chỉnh 6 mô hình cho dataset https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/code
+Tuần 2_Lab02_Làm nhóm_Xây dựng và tinh chỉnh 6 mô hình cho dataset Dự đoán giá nhà (House Prices)
 
 Gồm 4 file chính: 
 - Timesheet: Lưu trữ link bảng nhật ký tiến độ chung và cá nhân từng thành viên.
