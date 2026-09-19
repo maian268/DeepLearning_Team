@@ -1,0 +1,525 @@
+MSSubClass: Identifies the type of dwelling involved in the sale.            # Xác định loại nhà ở tham gia giao dịch.	
+
+        20	1-STORY 1946 & NEWER ALL STYLES
+        30	1-STORY 1945 & OLDER
+        40	1-STORY W/FINISHED ATTIC ALL AGES                              # có gác mái hoàn thiện, mọi thời kỳ
+        45	1-1/2 STORY - UNFINISHED ALL AGES
+        50	1-1/2 STORY FINISHED ALL AGES
+        60	2-STORY 1946 & NEWER
+        70	2-STORY 1945 & OLDER
+        75	2-1/2 STORY ALL AGES
+        80	SPLIT OR MULTI-LEVEL                                           # Nhà chẻ tầng hoặc nhiều tầng
+        85	SPLIT FOYER   # Nhà chẻ tầng có sảnh vào
+        90	DUPLEX - ALL STYLES AND AGES
+       120	1-STORY PUD (Planned Unit Development) - 1946 & NEWER          # PUD : Khu phát triển đơn vị quy hoạch
+       150	1-1/2 STORY PUD - ALL AGES
+       160	2-STORY PUD - 1946 & NEWER
+       180	PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
+       190	2 FAMILY CONVERSION - ALL STYLES AND AGES                      # Nhà chuyển đổi 2 hộ gia đình
+
+MSZoning: Identifies the general zoning classification of the sale.          # Xác định phân vùng/quy hoạch chung của giao dịch.
+		
+       A	Agriculture                                                    # Nông nghiệp
+       C	Commercial                                                     # Thương mại
+       FV	Floating Village Residential                                   # Khu dân cư Floating Village
+       I	Industrial                                                     # Công nghiệp
+       RH	Residential High Density                                       # Dân cư mật độ cao
+       RL	Residential Low Density                                        # Dân cư mật độ thấp
+       RP	Residential Low Density Park 
+       RM	Residential Medium Density
+	
+LotFrontage: Linear feet of street connected to property                     # Số feet tuyến tính mặt tiền đường gắn với bất động sản.
+
+LotArea: Lot size in square feet                                             # Diện tích lô đất, tính bằng feet vuông.
+
+Street: Type of road access to property                                      # Loại đường tiếp cận bất động sản.
+
+       Grvl	Gravel	                                                        # Sỏi
+       Pave	Paved                                                          # Trải nhựa
+       	
+Alley: Type of alley access to property                                      # Loại hẻm tiếp cận bất động sản.
+
+       Grvl	Gravel
+       Pave	Paved
+       NA 	No alley access                                                # Không có lối vào hẻm
+		
+LotShape: General shape of property                                          # Hình dạng chung của bất động sản.
+
+       Reg	Regular	                                                 # Đều/chính quy
+       IR1	Slightly irregular                                             # Hơi không đều
+       IR2	Moderately Irregular                                           # Không đều vừa phải
+       IR3	Irregular                                                      # Không đều
+       
+LandContour: Flatness of the property                                                      # Độ bằng phẳng của bất động sản.
+
+       Lvl	Near Flat/Level	                                                        # Gần bằng phẳng/ngang
+       Bnk	Banked - Quick and significant rise from street grade to building            # Dốc nền - tăng nhanh và đáng kể từ mặt đường đến nhà
+       HLS	Hillside - Significant slope from side to side                               # Sườn đồi - dốc đáng kể từ bên này sang bên kia
+       Low	Depression                                                                   # Trũng/thấp
+		
+Utilities: Type of utilities available                                       # Loại tiện ích có sẵn.
+		
+       AllPub	All public Utilities (E,G,W,& S)	                            # Tất cả tiện ích công cộng (điện, gas, nước, cống)
+       NoSewr	Electricity, Gas, and Water (Septic Tank)                      # Điện, gas và nước (bể phốt tự hoại)
+       NoSeWa	Electricity and Gas Only                                       # Chỉ điện và gas
+       ELO	Electricity only	                                          # Chỉ điện
+	
+LotConfig: Lot configuration                                                 # Cấu hình lô đất.
+
+       Inside	Inside lot                                                     # Lô nội khu
+       Corner	Corner lot                                                     # Lô góc
+       CulDSac	Cul-de-sac                                              # Lô cuối đường cụt
+       FR2	Frontage on 2 sides of property                                # Mặt tiền ở 2 phía bất động sản
+       FR3	Frontage on 3 sides of property                                # Mặt tiền ở 3 phía bất động sản
+	
+LandSlope: Slope of property                                                 # Độ dốc của bất động sản.
+		
+       Gtl	Gentle slope                                                   # Dốc nhẹ
+       Mod	Moderate Slope	                                          # Dốc vừa
+       Sev	Severe Slope                                                   # Dốc nặng
+	
+Neighborhood: Physical locations within Ames city limits                     # Vị trí địa lý trong giới hạn thành phố Ames.
+
+       Blmngtn	Bloomington Heights
+       Blueste	Bluestem
+       BrDale	Briardale
+       BrkSide	Brookside
+       ClearCr	Clear Creek
+       CollgCr	College Creek
+       Crawfor	Crawford
+       Edwards	Edwards
+       Gilbert	Gilbert
+       IDOTRR	Iowa DOT and Rail Road
+       MeadowV	Meadow Village
+       Mitchel	Mitchell
+       Names	North Ames
+       NoRidge	Northridge
+       NPkVill	Northpark Villa
+       NridgHt	Northridge Heights
+       NWAmes	Northwest Ames
+       OldTown	Old Town
+       SWISU	South & West of Iowa State University
+       Sawyer	Sawyer
+       SawyerW	Sawyer West
+       Somerst	Somerset
+       StoneBr	Stone Brook
+       Timber	Timberland
+       Veenker	Veenker
+			
+Condition1: Proximity to various conditions                                  # Mức gần với các điều kiện khác nhau.
+	
+       Artery	Adjacent to arterial street                                    # Kề đường trục chính
+       Feedr	Adjacent to feeder street	                                   # Kề đường nhánh/gom
+       Norm	Normal	                                                        # Bình thường
+       RRNn	Within 200' of North-South Railroad                            # Trong vòng 200 feet của đường sắt Bắc-Nam
+       RRAn	Adjacent to North-South Railroad                               # Kề đường sắt Bắc-Nam
+       PosN	Near positive off-site feature--park, greenbelt, etc.          # Gần tiện ích tích cực ngoài khuôn viên - công viên, vành đai xanh, v.v.
+       PosA	Adjacent to postive off-site feature                           # Kề tiện ích tích cực ngoài khuôn viên
+       RRNe	Within 200' of East-West Railroad                              # Trong vòng 200 feet của đường sắt Đông-Tây
+       RRAe	Adjacent to East-West Railroad                                 # Kề đường sắt Đông-Tây
+	
+Condition2: Proximity to various conditions (if more than one is present)    # Mức gần với các điều kiện khác nhau (nếu có nhiều hơn một điều kiện).
+		
+       Artery	Adjacent to arterial street                                    # Kề đường trục chính
+       Feedr	Adjacent to feeder street	                                   # Kề đường nhánh/gom
+       Norm	Normal	                                                        # Bình thường
+       RRNn	Within 200' of North-South Railroad                            # Trong vòng 200 feet của đường sắt Bắc-Nam
+       RRAn	Adjacent to North-South Railroad                               # Kề đường sắt Bắc-Nam
+       PosN	Near positive off-site feature--park, greenbelt, etc.          # Gần tiện ích tích cực ngoài khuôn viên - công viên, vành đai xanh, v.v.
+       PosA	Adjacent to postive off-site feature                           # Kề tiện ích tích cực ngoài khuôn viên
+       RRNe	Within 200' of East-West Railroad                              # Trong vòng 200 feet của đường sắt Đông-Tây
+       RRAe	Adjacent to East-West Railroad                                 # Kề đường sắt Đông-Tây
+	
+BldgType: Type of dwelling                                                          # Loại nhà ở.
+
+       1Fam	Single-family Detached	                                          # Nhà riêng một hộ gia đình, tách biệt
+       2FmCon	Two-family Conversion; originally built as one-family dwelling        # Nhà chuyển đổi hai hộ gia đình; ban đầu được xây làm nhà một hộ
+       Duplx	Duplex
+       TwnhsE	Townhouse End Unit                                                    # Nhà phố đơn vị đầu hồi
+       TwnhsI	Townhouse Inside Unit                                                 # Nhà phố đơn vị giữa
+	
+HouseStyle: Style of dwelling                                                # Kiểu nhà.
+	
+       1Story	One story
+       1.5Fin	One and one-half story: 2nd level finished
+       1.5Unf	One and one-half story: 2nd level unfinished
+       2Story	Two story
+       2.5Fin	Two and one-half story: 2nd level finished
+       2.5Unf	Two and one-half story: 2nd level unfinished
+       SFoyer	Split Foyer                                                    # Sảnh vào chẻ tầng
+       SLvl	Split Level                                                    # Nhà chẻ tầng
+	
+OverallQual: Rates the overall material and finish of the house              # Đánh giá chất lượng tổng thể vật liệu và hoàn thiện của nhà.
+
+       10	Very Excellent
+       9	Excellent
+       8	Very Good
+       7	Good
+       6	Above Average
+       5	Average
+       4	Below Average
+       3	Fair
+       2	Poor
+       1	Very Poor
+	
+OverallCond: Rates the overall condition of the house                        # Đánh giá tình trạng tổng thể của nhà.
+
+       10	Very Excellent
+       9	Excellent
+       8	Very Good
+       7	Good
+       6	Above Average	
+       5	Average
+       4	Below Average	
+       3	Fair
+       2	Poor
+       1	Very Poor
+		
+YearBuilt: Original construction date                                        # Ngày xây dựng ban đầu.
+
+YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)       # Ngày cải tạo (giống ngày xây nếu không cải tạo hoặc thêm).
+
+RoofStyle: Type of roof                          # Kiểu mái.
+
+       Flat	Flat                               # Mái bằng
+       Gable	Gable                              # Mái đầu hồi
+       Gambrel	Gabrel (Barn)               # Gambrel (mái kiểu chuồng/barn)
+       Hip	Hip                                # Mái hông
+       Mansard	Mansard                     # Mansard
+       Shed	Shed                               # Mái một dốc
+		
+RoofMatl: Roof material                                 # Vật liệu mái.
+
+       ClyTile	Clay or Tile                       # Đất sét hoặc ngói
+       CompShg	Standard (Composite) Shingle       # Tấm lợp tiêu chuẩn (composite)
+       Membran	Membrane                           # Màng
+       Metal	Metal                                     # Kim loại
+       Roll	Roll                                      # Cuộn
+       Tar&Grv	Gravel & Tar                       # Sỏi và hắc ín
+       WdShake	Wood Shakes                        # Ván lợp gỗ shakes
+       WdShngl	Wood Shingles                      # Lớp phủ bên ngoài nhà.
+		
+Exterior1st: Exterior covering on house          # Lớp phủ bên ngoài nhà.
+
+       AsbShng	Asbestos Shingles           # Ván lợp amiăng
+       AsphShn	Asphalt Shingles            # Ván lợp nhựa đường
+       BrkComm	Brick Common                # Gạch thường
+       BrkFace	Brick Face                  # Gạch mặt
+       CBlock	Cinder Block                       # Block xi măng/xỉ
+       CemntBd	Cement Board                # Ván xi măng
+       HdBoard	Hard Board                  # Ván cứng
+       ImStucc	Imitation Stucco            # Stucco giả
+       MetalSd	Metal Siding                # Vách kim loại
+       Other	Other                              # Khác
+       Plywood	Plywood                     # Gỗ dán
+       PreCast	PreCast	              # Bê tông đúc sẵn
+       Stone	Stone                              # Đá
+       Stucco	Stucco                             # Stucco
+       VinylSd	Vinyl Siding                # Vách nhựa vinyl
+       Wd Sdng	Wood Siding                 # Vách gỗ
+       WdShing	Wood Shingles               # Ván lợp gỗ
+	
+Exterior2nd: Exterior covering on house (if more than one material)          # Lớp phủ bên ngoài nhà (nếu có nhiều hơn một vật liệu).
+
+       AsbShng	Asbestos Shingles           # Ván lợp amiăng
+       AsphShn	Asphalt Shingles            # Ván lợp nhựa đường
+       BrkComm	Brick Common                # Gạch thường
+       BrkFace	Brick Face                  # Gạch mặt
+       CBlock	Cinder Block                       # Block xi măng/xỉ
+       CemntBd	Cement Board                # Ván xi măng
+       HdBoard	Hard Board                  # Ván cứng
+       ImStucc	Imitation Stucco            # Stucco giả
+       MetalSd	Metal Siding                # Vách kim loại
+       Other	Other                              # Khác
+       Plywood	Plywood                     # Gỗ dán
+       PreCast	PreCast                     # Bê tông đúc sẵn
+       Stone	Stone                              # Đá
+       Stucco	Stucco                             # Stucco
+       VinylSd	Vinyl Siding                # Vách nhựa vinyl
+       Wd Sdng	Wood Siding                 # Vách gỗ
+       WdShing	Wood Shingles               # Ván lợp gỗ
+	
+MasVnrType: Masonry veneer type                  # Loại ốp trang trí bằng gạch/đá.
+
+       BrkCmn	Brick Common                       # Gạch thường
+       BrkFace	Brick Face                  # Gạch mặt
+       CBlock	Cinder Block                       # Block xi măng/xỉ
+       None	None                 
+       Stone	Stone
+	
+MasVnrArea: Masonry veneer area in square feet          # Diện tích ốp gạch/đá, tính bằng feet vuông.
+
+ExterQual: Evaluates the quality of the material on the exterior             # Đánh giá chất lượng vật liệu bên ngoài.
+		
+       Ex	Excellent
+       Gd	Good
+       TA	Average/Typical
+       Fa	Fair
+       Po	Poor
+		
+ExterCond: Evaluates the present condition of the material on the exterior          # Đánh giá tình trạng hiện tại của vật liệu bên ngoài.
+		
+       Ex	Excellent
+       Gd	Good
+       TA	Average/Typical
+       Fa	Fair
+       Po	Poor
+		
+Foundation: Type of foundation            # Loại móng.
+		
+       BrkTil	Brick & Tile                # Gạch & ngói
+       CBlock	Cinder Block                # lock xi măng/xỉ
+       PConc	Poured Contrete	       # Bê tông đổ
+       Slab	Slab                        # Sàn/móng bản
+       Stone	Stone                       
+       Wood	Wood
+		
+BsmtQual: Evaluates the height of the basement          # Đánh giá chiều cao tầng hầm.
+
+       Ex	Excellent (100+ inches)	
+       Gd	Good (90-99 inches)
+       TA	Typical (80-89 inches)
+       Fa	Fair (70-79 inches)
+       Po	Poor (<70 inches)
+       NA	No Basement
+		
+BsmtCond: Evaluates the general condition of the basement             # Đánh giá tình trạng chung của tầng hầm.
+
+       Ex	Excellent
+       Gd	Good
+       TA	Typical - slight dampness allowed                       # Điển hình - cho phép hơi ẩm
+       Fa	Fair - dampness or some cracking or settling            # Khá - ẩm hoặc có nứt/lún
+       Po	Poor - Severe cracking, settling, or wetness            # Kém - nứt, lún hoặc ẩm ướt nghiêm trọng
+       NA	No Basement                                             # Không có tầng hầm
+	
+BsmtExposure: Refers to walkout or garden level walls          # Liên quan đến tường kiểu walkout hoặc tầng vườn.
+
+       Gd	Good Exposure                                                                       # Độ lộ tốt
+       Av	Average Exposure (split levels or foyers typically score average or above)	       # Độ lộ trung bình (nhà split level hoặc foyer thường đạt trung bình hoặc cao hơn)
+       Mn	Mimimum Exposure                                                                    # Độ lộ tối thiểu
+       No	No Exposure
+       NA	No Basement
+	
+BsmtFinType1: Rating of basement finished area          # Đánh giá diện tích hoàn thiện tầng hầm.
+
+       GLQ	Good Living Quarters
+       ALQ	Average Living Quarters
+       BLQ	Below Average Living Quarters	
+       Rec	Average Rec Room
+       LwQ	Low Quality
+       Unf	Unfinshed
+       NA	No Basement
+		
+BsmtFinSF1: Type 1 finished square feet          # Diện tích hoàn thiện loại 1, tính bằng feet vuông.
+
+BsmtFinType2: Rating of basement finished area (if multiple types)           # Đánh giá diện tích hoàn thiện tầng hầm (nếu có nhiều loại).
+
+       GLQ	Good Living Quarters
+       ALQ	Average Living Quarters
+       BLQ	Below Average Living Quarters	
+       Rec	Average Rec Room
+       LwQ	Low Quality
+       Unf	Unfinshed
+       NA	No Basement
+
+BsmtFinSF2: Type 2 finished square feet          # Diện tích hoàn thiện loại 2, tính bằng feet vuông.
+
+BsmtUnfSF: Unfinished square feet of basement area             # Diện tích tầng hầm chưa hoàn thiện, tính bằng feet vuông.
+
+TotalBsmtSF: Total square feet of basement area                # Tổng diện tích tầng hầm, tính bằng feet vuông.
+
+Heating: Type of heating                                       # Loại sưởi.
+		
+       Floor	Floor Furnace                                    # Lò sưởi sàn
+       GasA	Gas forced warm air furnace                      # Lò sưởi khí nóng cưỡng bức bằng gas
+       GasW	Gas hot water or steam heat                      # Sưởi nước nóng hoặc hơi bằng gas
+       Grav	Gravity furnace	                            # Lò sưởi trọng lực
+       OthW	Hot water or steam heat other than gas           # Sưởi nước nóng hoặc hơi không dùng gas
+       Wall	Wall furnace                                     # Lò sưởi tường
+		
+HeatingQC: Heating quality and condition         # Chất lượng và tình trạng sưởi.
+
+       Ex	Excellent
+       Gd	Good
+       TA	Average/Typical
+       Fa	Fair
+       Po	Poor
+		
+CentralAir: Central air conditioning             # Điều hòa trung tâm.
+
+       N	No
+       Y	Yes
+		
+Electrical: Electrical system                                                # Hệ thống điện.
+
+       SBrkr	Standard Circuit Breakers & Romex                              # Aptomat tiêu chuẩn & dây Romex
+       FuseA	Fuse Box over 60 AMP and all Romex wiring (Average)	       # Hộp cầu chì trên 60 AMP và toàn bộ dây Romex (trung bình)
+       FuseF	60 AMP Fuse Box and mostly Romex wiring (Fair)                 # Hộp cầu chì 60 AMP và phần lớn dây Romex (khá)
+       FuseP	60 AMP Fuse Box and mostly knob & tube wiring (poor)           # Hộp cầu chì 60 AMP và phần lớn dây knob & tube (kém)
+       Mix	Mixed                                                          # Hỗn hợp
+
+1stFlrSF: Diện tích tầng 1, tính bằng feet 
+ 
+2ndFlrSF: Diện tích tầng 2, tính bằng feet vuông.
+
+LowQualFinSF: Diện tích hoàn thiện chất lượng thấp (tất cả các tầng).
+
+GrLivArea: Diện tích sinh hoạt trên mặt đất, tính bằng feet vuông.
+
+BsmtFullBath: Số phòng tắm đầy đủ dưới tầng hầm.
+
+BsmtHalfBath: Số phòng tắm nửa dưới tầng hầm.
+
+FullBath: Số phòng tắm đầy đủ trên mặt đất.
+
+HalfBath: Số phòng tắm nửa trên mặt đất.
+
+Bedroom: Số phòng ngủ trên mặt đất (KHÔNG bao gồm phòng ngủ dưới tầng hầm).
+
+Kitchen: Số nhà bếp trên mặt đất.
+
+KitchenQual: Kitchen quality              # Chất lượng nhà bếp.
+
+       Ex	Excellent
+       Gd	Good
+       TA	Typical/Average
+       Fa	Fair
+       Po	Poor
+       	
+TotRmsAbvGrd: Total rooms above grade (does not include bathrooms)           # Tổng số phòng trên mặt đất (không bao gồm phòng tắm).
+
+Functional: Home functionality (Assume typical unless deductions are warranted)            # Tính năng sử dụng của nhà (giả định điển hình trừ khi cần khấu trừ).
+
+       Typ	Typical Functionality              # Tính năng điển hình
+       Min1	Minor Deductions 1                 # Khấu trừ nhỏ 1
+       Min2	Minor Deductions 2                 # Khấu trừ nhỏ 2
+       Mod	Moderate Deductions                # Khấu trừ vừa
+       Maj1	Major Deductions 1                 # Khấu trừ lớn 1
+       Maj2	Major Deductions 2                 # Khấu trừ lớn 2
+       Sev	Severely Damaged                   # Hư hỏng nghiêm trọng
+       Sal	Salvage only                       # Chỉ còn giá trị tận thu/thanh lý
+		
+Fireplaces: Number of fireplaces          # Số lò sưởi.
+
+FireplaceQu: Fireplace quality            # Chất lượng lò sưởi.
+
+       Ex	Excellent - Exceptional Masonry Fireplace                                                         # Lò sưởi xây đặc biệt
+       Gd	Good - Masonry Fireplace in main level                                                            # Lò sưởi xây ở tầng chính
+       TA	Average - Prefabricated Fireplace in main living area or Masonry Fireplace in basement            # Lò sưởi đúc sẵn ở khu sinh hoạt chính hoặc lò sưởi xây dưới tầng hầm
+       Fa	Fair - Prefabricated Fireplace in basement                                                        # Lò sưởi đúc sẵn dưới tầng hầm
+       Po	Poor - Ben Franklin Stove                                                                         # Bếp/lò Ben Franklin
+
+
+       NA	No Fireplace                                                                                      # Không có lò sưởi
+		
+GarageType: Garage location                                                                # Vị trí gara.
+		
+       2Types	More than one type of garage                                                 # Nhiều hơn một loại gara
+       Attchd	Attached to home                                                             # Gắn liền nhà
+       Basment	Basement Garage                                                       # Gara dưới tầng hầm
+       BuiltIn	Built-In (Garage part of house - typically has room above garage)     # Gara xây liền (một phần của nhà - thường có phòng phía trên gara)
+       CarPort	Car Port                                                              # Mái che xe
+       Detchd	Detached from home                                                           # Gara tách rời nhà
+       NA	No Garage                                                                    # Không có gara
+		
+GarageYrBlt: Year garage was built        # Năm gara được xây.
+		
+GarageFinish: Interior finish of the garage      # Hoàn thiện nội thất gara.
+
+       Fin	Finished
+       RFn	Rough Finished	
+       Unf	Unfinished
+       NA	No Garage
+		
+GarageCars: Size of garage in car capacity       # Sức chứa gara theo số xe.
+
+GarageArea: Size of garage in square feet        # Diện tích gara, tính bằng feet vuông.
+
+GarageQual: Garage quality         # Chất lượng gara.
+
+       Ex	Excellent
+       Gd	Good
+       TA	Typical/Average
+       Fa	Fair
+       Po	Poor
+       NA	No Garage
+		
+GarageCond: Garage condition       # Tình trạng gara.
+
+       Ex	Excellent
+       Gd	Good
+       TA	Typical/Average
+       Fa	Fair
+       Po	Poor
+       NA	No Garage
+		
+PavedDrive: Paved driveway         # Đường lái xe trải nhựa.
+
+       Y	Paved 
+       P	Partial Pavement
+       N	Dirt/Gravel
+		
+WoodDeckSF: Wood deck area in square feet               # Diện tích sàn gỗ ngoài trời, tính bằng feet vuông.
+
+OpenPorchSF: Open porch area in square feet             # Diện tích hiên mở, tính bằng feet vuông.
+
+EnclosedPorch: Enclosed porch area in square feet       # Diện tích hiên kín, tính bằng feet vuông.
+
+3SsnPorch: Three season porch area in square feet       # Diện tích hiên ba mùa, tính bằng feet vuông.
+
+ScreenPorch: Screen porch area in square feet           # Diện tích hiên lưới, tính bằng feet vuông.
+
+PoolArea: Pool area in square feet                      # Diện tích hồ bơi, tính bằng feet vuông.
+
+PoolQC: Pool quality               # Chất lượng hồ bơi.
+		
+       Ex	Excellent
+       Gd	Good
+       TA	Average/Typical
+       Fa	Fair
+       NA	No Pool
+		
+Fence: Fence quality               # Chất lượng hàng rào.
+		
+       GdPrv	Good Privacy
+       MnPrv	Minimum Privacy
+       GdWo	Good Wood
+       MnWw	Minimum Wood/Wire
+       NA	No Fence
+	
+MiscFeature: Miscellaneous feature not covered in other categories           # Đặc điểm linh tinh không thuộc các mục khác.
+		
+       Elev	Elevator
+       Gar2	2nd Garage (if not described in garage section)
+       Othr	Other
+       Shed	Shed (over 100 SF)          # Nhà kho
+       TenC	Tennis Court
+       NA	None
+		
+MiscVal: $Value of miscellaneous feature         # Giá trị $ của đặc điểm linh tinh.
+
+MoSold: Month Sold (MM)
+
+YrSold: Year Sold (YYYY)
+
+SaleType: Type of sale                                         # Loại giao dịch.
+		
+       WD 	Warranty Deed - Conventional                     # Giấy bảo hành chuyển nhượng - thông thường
+       CWD	Warranty Deed - Cash                             # Giấy bảo hành chuyển nhượng - tiền mặt
+       VWD	Warranty Deed - VA Loan                          # Giấy bảo hành chuyển nhượng - khoản vay VA
+       New	Home just constructed and sold                   # Nhà vừa xây xong và bán
+       COD	Court Officer Deed/Estate                        # Giấy chuyển nhượng của thừa phát lại/tài sản thừa kế
+       Con	Contract 15% Down payment regular terms          # Hợp đồng trả trước 15%, điều khoản thông thường
+       ConLw	Contract Low Down payment and low interest       # Hợp đồng trả trước thấp và lãi suất thấp
+       ConLI	Contract Low Interest                            # Hợp đồng lãi suất thấp
+       ConLD	Contract Low Down                                # Hợp đồng trả trước thấp
+       Oth	Other                                            # Khác
+		
+SaleCondition: Condition of sale                                                                                # Tình trạng giao dịch.
+
+       Normal	Normal Sale                                                                                       # Giao dịch bình thường
+       Abnorml	Abnormal Sale -  trade, foreclosure, short sale                                            # Giao dịch bất thường - trao đổi, tịch thu, bán ngắn
+       AdjLand	Adjoining Land Purchase                                                                    # Mua đất liền kề
+       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	       # Phân bổ - hai bất động sản liên kết với giấy chủ quyền riêng, thường là condo với một đơn vị gara
+       Family	Sale between family members                                                                       # Giao dịch giữa các thành viên gia đình
+       Partial	Home was not completed when last assessed (associated with New Homes)                      # Nhà chưa hoàn thiện khi được thẩm định lần cuối (gắn với Nhà mới)
