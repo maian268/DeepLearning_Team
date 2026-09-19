@@ -1,0 +1,11 @@
+{
+  "model": "GradientBoostingRegressor",
+  "random_state": 42,
+  "cv": 5,
+  "best_params": {
+    "regressor__learning_rate": 0.1,
+    "regressor__max_depth": 3,
+    "regressor__min_samples_leaf": 2,
+    "regressor__n_estimators": 300
+  }
+}

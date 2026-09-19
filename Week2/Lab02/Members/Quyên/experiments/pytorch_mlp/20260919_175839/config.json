@@ -1,0 +1,7 @@
+{
+  "model": "PyTorch MLP",
+  "task": "regression",
+  "random_state": 42,
+  "epochs": 59,
+  "input_features": 272
+}

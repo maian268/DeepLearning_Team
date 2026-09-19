@@ -1,0 +1,53 @@
+_wandb:
+    value:
+        cli_version: 0.30.0
+        e:
+            wll5pwqzlgeamdag9l0eun5orbyg62cv:
+                codePath: c:\Users\ASUS\Data_Science_ Junior\DL\Tuan02\house_price\notebooks\pytorch_mlp_regression.ipynb
+                codePathLocal: pytorch_mlp_regression.ipynb
+                email: quyentrandt1411@gmail.com
+                executable: c:\Users\ASUS\Data_Science_ Junior\DL\.venv\Scripts\python.exe
+                git:
+                    commit: 1a2e623889e197635e03b9192932695580e6da51
+                    remote: https://github.com/Yakashiba/DEEP-LEARNING
+                host: YAKASHIBA
+                os: Windows-11-10.0.26200-SP0
+                program: c:\Users\ASUS\Data_Science_ Junior\DL\Tuan02\house_price\notebooks\pytorch_mlp_regression.ipynb
+                python: CPython 3.13.7
+                root: c:\Users\ASUS\Data_Science_ Junior\DL\Tuan02\house_price\experiments\pytorch_mlp\20260919_175839
+                startedAt: "2026-09-19T10:58:43.648784Z"
+                writerId: wll5pwqzlgeamdag9l0eun5orbyg62cv
+        m: []
+        python_version: 3.13.7
+        t:
+            "1":
+                - 1
+                - 5
+                - 53
+            "2":
+                - 1
+                - 5
+                - 53
+            "3":
+                - 2
+                - 13
+                - 16
+            "4": 3.13.7
+            "5": 0.30.0
+            "8":
+                - 1
+                - 3
+            "12": 0.30.0
+            "13": windows-amd64
+epochs:
+    value: 59
+input_features:
+    value: 272
+mae:
+    value: 16385.03515625
+r2:
+    value: 0.897365152835846
+rmse:
+    value: 28057.8499532662
+rmsle:
+    value: 0.13540696495551482

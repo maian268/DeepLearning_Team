@@ -1,0 +1,6 @@
+model,task,run_id,parameters,mae,rmse,r2,rmsle,roc_auc,accuracy
+gradient_boosting,regression,20260919_180037,"{'regressor__learning_rate': 0.1, 'regressor__max_depth': 3, 'regressor__min_samples_leaf': 2, 'regressor__n_estimators': 300}",15932.272119361221,26367.22115792624,0.9093610450440087,0.1364356048623695,,
+svr,regression,20260919_180104,"{'regressor__C': 300, 'regressor__epsilon': 0.01, 'regressor__gamma': 'scale', 'regressor__kernel': 'rbf'}",45997.12127011472,77427.48728789978,0.21841449427528536,0.3534918576195811,,
+mlp,regression,20260919_180152,"{'regressor__alpha': 0.001, 'regressor__hidden_layer_sizes': [128, 64], 'regressor__learning_rate_init': 0.001}",21396.91826199926,37227.45920533208,0.8193188032099488,0.16394192513332942,,
+pytorch_mlp,regression,20260919_180218,"{'model': 'PyTorch MLP', 'task': 'regression', 'random_state': 42, 'epochs': 59, 'input_features': 272}",16385.03515625,28057.8499532662,0.897365152835846,0.13540696495551482,,
+logistic_regression,classification,20260919_180004,"{'classifier__C': 0.01, 'classifier__class_weight': 'balanced'}",,,,,0.9798742728466879,0.9212328767123288

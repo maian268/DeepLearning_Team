@@ -1,0 +1,27 @@
+2026-09-19 17:44:08,098 INFO    MainThread:9484 [wandb_init.py:setup_run_log_directory():739] Logging user logs to c:\Users\ASUS\Data_Science_ Junior\DL\Tuan02\house_price\experiments\gradient_boosting\20260919_174405\wandb\run-20260919_174408-h61ktxoz\logs\debug.log
+2026-09-19 17:44:08,098 INFO    MainThread:9484 [wandb_init.py:setup_run_log_directory():740] Logging internal logs to c:\Users\ASUS\Data_Science_ Junior\DL\Tuan02\house_price\experiments\gradient_boosting\20260919_174405\wandb\run-20260919_174408-h61ktxoz\logs\debug-internal.log
+2026-09-19 17:44:08,098 INFO    MainThread:9484 [wandb_init.py:monkeypatch_ipython():658] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x000002B3FA2F8F50>
+2026-09-19 17:44:08,099 INFO    MainThread:9484 [wandb_init.py:init():783] calling init triggers
+2026-09-19 17:44:08,099 INFO    MainThread:9484 [wandb_init.py:init():788] wandb.init called with sweep_config: {}
+config: {'best_params': {'regressor__learning_rate': 0.1, 'regressor__max_depth': 3, 'regressor__min_samples_leaf': 2, 'regressor__n_estimators': 300}, 'mae': 15932.272119361221, 'rmse': 26367.22115792624, 'r2': 0.9093610450440087, 'rmsle': 0.1364356048623695, '_wandb': {}}
+2026-09-19 17:44:08,099 INFO    MainThread:9484 [wandb_init.py:init():831] starting backend
+2026-09-19 17:44:08,099 INFO    MainThread:9484 [wandb_init.py:init():846] sending inform_init request
+2026-09-19 17:44:08,108 INFO    MainThread:9484 [wandb_init.py:init():851] backend started and connected
+2026-09-19 17:44:08,110 INFO    MainThread:9484 [wandb_run.py:_label_probe_notebook():1213] probe notebook
+2026-09-19 17:44:08,110 INFO    MainThread:9484 [wandb_run.py:_label_probe_notebook():1223] Unable to probe notebook: 'charmap' codec can't decode byte 0x81 in position 5296: character maps to <undefined>
+2026-09-19 17:44:08,110 INFO    MainThread:9484 [wandb_init.py:init():921] updated telemetry
+2026-09-19 17:44:08,240 INFO    MainThread:9484 [wandb_init.py:init():944] communicating run to backend with 90.0 second timeout
+2026-09-19 17:44:09,470 INFO    MainThread:9484 [wandb_init.py:init():981] starting run threads in backend
+2026-09-19 17:44:09,560 INFO    MainThread:9484 [wandb_run.py:_console_start():2531] atexit reg
+2026-09-19 17:44:09,560 INFO    MainThread:9484 [wandb_run.py:_redirect():2381] redirect: wrap_raw
+2026-09-19 17:44:09,560 INFO    MainThread:9484 [wandb_run.py:_redirect():2450] Wrapping output streams.
+2026-09-19 17:44:09,560 INFO    MainThread:9484 [wandb_run.py:_redirect():2473] Redirects installed.
+2026-09-19 17:44:09,561 INFO    MainThread:9484 [wandb_init.py:init():1019] run started, returning control to user process
+2026-09-19 17:44:10,411 INFO    MainThread:9484 [wandb_run.py:_finish():2303] finishing run phuongquyen-data-engineer/house-price-regression/h61ktxoz
+2026-09-19 17:44:10,411 INFO    MainThread:9484 [jupyter.py:save_history():441] not saving jupyter history
+2026-09-19 17:44:10,412 INFO    MainThread:9484 [jupyter.py:save_ipynb():368] not saving jupyter notebook
+2026-09-19 17:44:10,412 INFO    MainThread:9484 [wandb_init.py:_jupyter_teardown():637] cleaning up jupyter logic
+2026-09-19 17:44:10,412 INFO    MainThread:9484 [wandb_run.py:_atexit_cleanup():2498] got exitcode: 0
+2026-09-19 17:44:10,413 INFO    MainThread:9484 [wandb_run.py:_restore():2480] restore
+2026-09-19 17:44:10,413 INFO    MainThread:9484 [wandb_run.py:_restore():2486] restore done
+2026-09-19 17:44:18,589 INFO    MainThread:9484 [wandb_run.py:_footer_sync_info():3901] logging synced files

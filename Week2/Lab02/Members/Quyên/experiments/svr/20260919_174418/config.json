@@ -1,0 +1,11 @@
+{
+  "model": "SVR",
+  "random_state": 42,
+  "cv": 5,
+  "best_params": {
+    "regressor__C": 300,
+    "regressor__epsilon": 0.01,
+    "regressor__gamma": "scale",
+    "regressor__kernel": "rbf"
+  }
+}

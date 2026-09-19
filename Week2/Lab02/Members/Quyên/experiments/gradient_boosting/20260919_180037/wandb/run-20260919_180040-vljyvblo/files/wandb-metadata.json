@@ -1,0 +1,17 @@
+{
+  "os":  "Windows-11-10.0.26200-SP0",
+  "python":  "CPython 3.13.7",
+  "startedAt":  "2026-09-19T11:00:40.231078Z",
+  "program":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\notebooks\\gradient_boosting_regression.ipynb",
+  "codePath":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\notebooks\\gradient_boosting_regression.ipynb",
+  "codePathLocal":  "gradient_boosting_regression.ipynb",
+  "git":  {
+    "remote":  "https://github.com/Yakashiba/DEEP-LEARNING",
+    "commit":  "1a2e623889e197635e03b9192932695580e6da51"
+  },
+  "email":  "quyentrandt1411@gmail.com",
+  "root":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\experiments\\gradient_boosting\\20260919_180037",
+  "host":  "YAKASHIBA",
+  "executable":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\.venv\\Scripts\\python.exe",
+  "writerId":  "3y9gel6pcdw4f9f3wo5cxpm066ixr48m"
+}

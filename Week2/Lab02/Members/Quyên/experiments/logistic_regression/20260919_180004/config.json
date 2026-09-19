@@ -1,0 +1,9 @@
+{
+  "model": "LogisticRegression",
+  "task": "classification",
+  "threshold": 163000.0,
+  "best_params": {
+    "classifier__C": 0.01,
+    "classifier__class_weight": "balanced"
+  }
+}

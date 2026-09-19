@@ -1,0 +1,17 @@
+{
+  "os":  "Windows-11-10.0.26200-SP0",
+  "python":  "CPython 3.13.7",
+  "startedAt":  "2026-09-19T10:56:01.743205Z",
+  "program":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\notebooks\\mlp_regression.ipynb",
+  "codePath":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\notebooks\\mlp_regression.ipynb",
+  "codePathLocal":  "mlp_regression.ipynb",
+  "git":  {
+    "remote":  "https://github.com/Yakashiba/DEEP-LEARNING",
+    "commit":  "1a2e623889e197635e03b9192932695580e6da51"
+  },
+  "email":  "quyentrandt1411@gmail.com",
+  "root":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\Tuan02\\house_price\\experiments\\mlp\\20260919_175540",
+  "host":  "YAKASHIBA",
+  "executable":  "c:\\Users\\ASUS\\Data_Science_ Junior\\DL\\.venv\\Scripts\\python.exe",
+  "writerId":  "18nd4uiyvo64dltf3zlz70eaei72rohx"
+}
