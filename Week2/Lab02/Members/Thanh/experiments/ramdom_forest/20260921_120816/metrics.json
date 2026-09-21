@@ -1,0 +1,7 @@
+{
+  "best_cv_rmse": 29107.38719564231,
+  "baseline_cv_rmse": 30140.043250599152,
+  "improvement": 1032.6560549568421,
+  "n_iter": 20,
+  "cv_folds": 5
+}
