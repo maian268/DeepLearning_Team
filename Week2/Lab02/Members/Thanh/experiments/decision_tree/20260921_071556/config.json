@@ -1,0 +1,16 @@
+{
+  "model_name": "decision_tree",
+  "best_params": {
+    "min_samples_split": 28,
+    "min_samples_leaf": 14,
+    "max_features": null,
+    "max_depth": null,
+    "criterion": "squared_error"
+  },
+  "n_iter": 30,
+  "cv": 5,
+  "scoring": "neg_mean_squared_error",
+  "random_state": 42,
+  "n_features": 267,
+  "timestamp": "20260921_071556"
+}

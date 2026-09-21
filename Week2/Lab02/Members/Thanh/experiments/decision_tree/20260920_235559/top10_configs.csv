@@ -1,0 +1,11 @@
+rmse,param_max_depth,param_min_samples_split,param_min_samples_leaf,param_max_features,param_criterion
+37491.76064824978,8,20,10,0.8,absolute_error
+38101.62296723663,12,15,15,,friedman_mse
+38143.10811201579,25,10,8,0.5,friedman_mse
+39367.728692261386,20,5,6,0.5,absolute_error
+39858.98103516845,20,2,2,0.8,friedman_mse
+40175.13199812304,5,2,1,,absolute_error
+40844.50840532683,20,15,6,0.8,friedman_mse
+40994.95145147622,8,5,10,0.5,friedman_mse
+41028.466968176646,12,5,4,0.5,squared_error
+41108.40099346256,20,10,2,0.5,squared_error

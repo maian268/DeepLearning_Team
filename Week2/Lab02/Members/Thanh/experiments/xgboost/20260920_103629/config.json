@@ -1,0 +1,57 @@
+{
+  "model_name": "xgboost",
+  "best_params": {
+    "subsample": 0.9,
+    "n_estimators": 500,
+    "min_child_weight": 4,
+    "max_depth": 2,
+    "learning_rate": 0.15,
+    "colsample_bytree": 1.0
+  },
+  "param_distributions": {
+    "n_estimators": [
+      100,
+      300,
+      500,
+      900,
+      1100
+    ],
+    "max_depth": [
+      2,
+      3,
+      5,
+      7,
+      10
+    ],
+    "learning_rate": [
+      0.01,
+      0.05,
+      0.1,
+      0.15,
+      0.2
+    ],
+    "min_child_weight": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "subsample": [
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "colsample_bytree": [
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ]
+  },
+  "n_iter": 15,
+  "cv": 5,
+  "scoring": "neg_mean_squared_error",
+  "random_state": 42,
+  "timestamp": "20260920_103629"
+}
