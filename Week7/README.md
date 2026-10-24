@@ -2,7 +2,7 @@
 2. Nhóm phải viết code cho mạng chạy được, thiết kế thí nghiệm, thu thập kết quả, giải thích kết quả và trình bày thành báo cáo khoa học.
 3. Năm đầu việc chính:
    
-  3.1 Sinh và khảo sát dữ liệu
+   3.1 Sinh và khảo sát dữ liệu
 - Viết hàm Gaussian đúng công thức.
 - Tạo train, validation và test độc lập.
 - Dùng seed để tái lập kết quả.
