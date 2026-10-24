@@ -1,7 +1,7 @@
 1. Bài nhóm yêu cầu xây dựng một mạng nơ-ron MLP bằng PyTorch để xấp xỉ hàm Gaussian hai chiều, sau đó thực nghiệm để tìm hiểu xem số lượng dữ liệu, số nơ-ron và số tầng ẩn ảnh hưởng thế nào đến độ chính xác của mô hình.
 2. Nhóm phải viết code cho mạng chạy được, thiết kế thí nghiệm, thu thập kết quả, giải thích kết quả và trình bày thành báo cáo khoa học.
 3. Năm đầu việc chính
-  1. Sinh và khảo sát dữ liệu
+  + Sinh và khảo sát dữ liệu
 - Viết hàm Gaussian đúng công thức.
 - Tạo train, validation và test độc lập.
 - Dùng seed để tái lập kết quả.
