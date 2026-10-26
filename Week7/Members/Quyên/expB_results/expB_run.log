@@ -1,0 +1,152 @@
+2026-10-26 14:36:55,818 | INFO | Thiết bị chạy: cpu
+2026-10-26 14:36:55,819 | INFO | Tạo dữ liệu: train=1000, validation=300, test=100
+2026-10-26 14:36:56,422 | INFO | Đã lưu biểu đồ phân bố dữ liệu.
+2026-10-26 14:36:56,423 | INFO | Log được ghi tại: expB_results\expB_run.log
+2026-10-26 14:36:56,423 | INFO | Bắt đầu thực nghiệm B | Số nơ-ron: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] | Epoch tối đa: 500 | Batch size: 32
+2026-10-26 14:36:56,423 | INFO | Bắt đầu huấn luyện mô hình có 1 nơ-ron ẩn.
+2026-10-26 14:36:58,313 | INFO | Ẩn 1 nơ-ron | Epoch 1/500 | Train MSE: 0.557854 | Val MSE: 0.443676
+2026-10-26 14:36:59,184 | INFO | Ẩn 1 nơ-ron | Epoch 50/500 | Train MSE: 0.003483 | Val MSE: 0.004375
+2026-10-26 14:37:00,151 | INFO | Ẩn 1 nơ-ron | Epoch 100/500 | Train MSE: 0.003211 | Val MSE: 0.004195
+2026-10-26 14:37:00,960 | INFO | Ẩn 1 nơ-ron | Epoch 150/500 | Train MSE: 0.003209 | Val MSE: 0.004207
+2026-10-26 14:37:01,716 | INFO | Ẩn 1 nơ-ron | Epoch 200/500 | Train MSE: 0.003212 | Val MSE: 0.004201
+2026-10-26 14:37:02,482 | INFO | Ẩn 1 nơ-ron | Epoch 250/500 | Train MSE: 0.003210 | Val MSE: 0.004197
+2026-10-26 14:37:03,491 | INFO | Ẩn 1 nơ-ron | Epoch 300/500 | Train MSE: 0.003210 | Val MSE: 0.004207
+2026-10-26 14:37:04,441 | INFO | Ẩn 1 nơ-ron | Epoch 350/500 | Train MSE: 0.003216 | Val MSE: 0.004197
+2026-10-26 14:37:05,334 | INFO | Ẩn 1 nơ-ron | Epoch 400/500 | Train MSE: 0.003219 | Val MSE: 0.004190
+2026-10-26 14:37:06,080 | INFO | Ẩn 1 nơ-ron | Epoch 450/500 | Train MSE: 0.003210 | Val MSE: 0.004229
+2026-10-26 14:37:06,843 | INFO | Ẩn 1 nơ-ron | Epoch 500/500 | Train MSE: 0.003214 | Val MSE: 0.004194
+2026-10-26 14:37:06,851 | INFO | Hoàn tất ẩn 1 nơ-ron | Best Val MSE: 0.004186 | Test MSE: 0.001815 | Test MAE: 0.032432 | Test RMSE: 0.042601 | Mô hình: expB_results/model_B_hid1.pth
+2026-10-26 14:37:06,852 | INFO | Bắt đầu huấn luyện mô hình có 2 nơ-ron ẩn.
+2026-10-26 14:37:06,878 | INFO | Ẩn 2 nơ-ron | Epoch 1/500 | Train MSE: 0.461271 | Val MSE: 0.417878
+2026-10-26 14:37:07,625 | INFO | Ẩn 2 nơ-ron | Epoch 50/500 | Train MSE: 0.003437 | Val MSE: 0.004176
+2026-10-26 14:37:08,383 | INFO | Ẩn 2 nơ-ron | Epoch 100/500 | Train MSE: 0.003159 | Val MSE: 0.004097
+2026-10-26 14:37:09,134 | INFO | Ẩn 2 nơ-ron | Epoch 150/500 | Train MSE: 0.003155 | Val MSE: 0.004088
+2026-10-26 14:37:09,894 | INFO | Ẩn 2 nơ-ron | Epoch 200/500 | Train MSE: 0.003138 | Val MSE: 0.004072
+2026-10-26 14:37:10,655 | INFO | Ẩn 2 nơ-ron | Epoch 250/500 | Train MSE: 0.003066 | Val MSE: 0.003989
+2026-10-26 14:37:11,412 | INFO | Ẩn 2 nơ-ron | Epoch 300/500 | Train MSE: 0.002972 | Val MSE: 0.003898
+2026-10-26 14:37:12,183 | INFO | Ẩn 2 nơ-ron | Epoch 350/500 | Train MSE: 0.002917 | Val MSE: 0.003834
+2026-10-26 14:37:13,054 | INFO | Ẩn 2 nơ-ron | Epoch 400/500 | Train MSE: 0.002917 | Val MSE: 0.003836
+2026-10-26 14:37:13,828 | INFO | Ẩn 2 nơ-ron | Epoch 450/500 | Train MSE: 0.002917 | Val MSE: 0.003827
+2026-10-26 14:37:14,589 | INFO | Ẩn 2 nơ-ron | Epoch 500/500 | Train MSE: 0.002921 | Val MSE: 0.003831
+2026-10-26 14:37:14,591 | INFO | Hoàn tất ẩn 2 nơ-ron | Best Val MSE: 0.003816 | Test MSE: 0.001618 | Test MAE: 0.028999 | Test RMSE: 0.040219 | Mô hình: expB_results/model_B_hid2.pth
+2026-10-26 14:37:14,591 | INFO | Bắt đầu huấn luyện mô hình có 3 nơ-ron ẩn.
+2026-10-26 14:37:14,608 | INFO | Ẩn 3 nơ-ron | Epoch 1/500 | Train MSE: 0.632749 | Val MSE: 0.512113
+2026-10-26 14:37:15,348 | INFO | Ẩn 3 nơ-ron | Epoch 50/500 | Train MSE: 0.002791 | Val MSE: 0.003581
+2026-10-26 14:37:16,106 | INFO | Ẩn 3 nơ-ron | Epoch 100/500 | Train MSE: 0.002478 | Val MSE: 0.003185
+2026-10-26 14:37:16,857 | INFO | Ẩn 3 nơ-ron | Epoch 150/500 | Train MSE: 0.002422 | Val MSE: 0.003086
+2026-10-26 14:37:17,611 | INFO | Ẩn 3 nơ-ron | Epoch 200/500 | Train MSE: 0.002313 | Val MSE: 0.002844
+2026-10-26 14:37:18,410 | INFO | Ẩn 3 nơ-ron | Epoch 250/500 | Train MSE: 0.001912 | Val MSE: 0.002341
+2026-10-26 14:37:19,178 | INFO | Ẩn 3 nơ-ron | Epoch 300/500 | Train MSE: 0.001055 | Val MSE: 0.001216
+2026-10-26 14:37:19,946 | INFO | Ẩn 3 nơ-ron | Epoch 350/500 | Train MSE: 0.001039 | Val MSE: 0.001226
+2026-10-26 14:37:20,703 | INFO | Ẩn 3 nơ-ron | Epoch 400/500 | Train MSE: 0.001053 | Val MSE: 0.001256
+2026-10-26 14:37:21,472 | INFO | Ẩn 3 nơ-ron | Epoch 450/500 | Train MSE: 0.001053 | Val MSE: 0.001245
+2026-10-26 14:37:22,243 | INFO | Ẩn 3 nơ-ron | Epoch 500/500 | Train MSE: 0.001039 | Val MSE: 0.001210
+2026-10-26 14:37:22,244 | INFO | Hoàn tất ẩn 3 nơ-ron | Best Val MSE: 0.001191 | Test MSE: 0.000668 | Test MAE: 0.019044 | Test RMSE: 0.025841 | Mô hình: expB_results/model_B_hid3.pth
+2026-10-26 14:37:22,244 | INFO | Bắt đầu huấn luyện mô hình có 4 nơ-ron ẩn.
+2026-10-26 14:37:22,262 | INFO | Ẩn 4 nơ-ron | Epoch 1/500 | Train MSE: 0.080964 | Val MSE: 0.059629
+2026-10-26 14:37:23,009 | INFO | Ẩn 4 nơ-ron | Epoch 50/500 | Train MSE: 0.001419 | Val MSE: 0.001766
+2026-10-26 14:37:23,766 | INFO | Ẩn 4 nơ-ron | Epoch 100/500 | Train MSE: 0.001157 | Val MSE: 0.001363
+2026-10-26 14:37:24,528 | INFO | Ẩn 4 nơ-ron | Epoch 150/500 | Train MSE: 0.001002 | Val MSE: 0.001161
+2026-10-26 14:37:25,289 | INFO | Ẩn 4 nơ-ron | Epoch 200/500 | Train MSE: 0.000952 | Val MSE: 0.001119
+2026-10-26 14:37:26,049 | INFO | Ẩn 4 nơ-ron | Epoch 250/500 | Train MSE: 0.000944 | Val MSE: 0.001108
+2026-10-26 14:37:26,851 | INFO | Ẩn 4 nơ-ron | Epoch 300/500 | Train MSE: 0.000942 | Val MSE: 0.001082
+2026-10-26 14:37:27,613 | INFO | Ẩn 4 nơ-ron | Epoch 350/500 | Train MSE: 0.000938 | Val MSE: 0.001077
+2026-10-26 14:37:28,370 | INFO | Ẩn 4 nơ-ron | Epoch 400/500 | Train MSE: 0.000924 | Val MSE: 0.001069
+2026-10-26 14:37:29,125 | INFO | Ẩn 4 nơ-ron | Epoch 450/500 | Train MSE: 0.000935 | Val MSE: 0.001100
+2026-10-26 14:37:29,904 | INFO | Ẩn 4 nơ-ron | Epoch 500/500 | Train MSE: 0.000934 | Val MSE: 0.001071
+2026-10-26 14:37:29,905 | INFO | Hoàn tất ẩn 4 nơ-ron | Best Val MSE: 0.001061 | Test MSE: 0.000645 | Test MAE: 0.019505 | Test RMSE: 0.025394 | Mô hình: expB_results/model_B_hid4.pth
+2026-10-26 14:37:29,906 | INFO | Bắt đầu huấn luyện mô hình có 5 nơ-ron ẩn.
+2026-10-26 14:37:29,923 | INFO | Ẩn 5 nơ-ron | Epoch 1/500 | Train MSE: 0.270770 | Val MSE: 0.203476
+2026-10-26 14:37:30,660 | INFO | Ẩn 5 nơ-ron | Epoch 50/500 | Train MSE: 0.001534 | Val MSE: 0.001750
+2026-10-26 14:37:31,409 | INFO | Ẩn 5 nơ-ron | Epoch 100/500 | Train MSE: 0.001215 | Val MSE: 0.001359
+2026-10-26 14:37:32,166 | INFO | Ẩn 5 nơ-ron | Epoch 150/500 | Train MSE: 0.001050 | Val MSE: 0.001159
+2026-10-26 14:37:32,910 | INFO | Ẩn 5 nơ-ron | Epoch 200/500 | Train MSE: 0.000971 | Val MSE: 0.001081
+2026-10-26 14:37:33,657 | INFO | Ẩn 5 nơ-ron | Epoch 250/500 | Train MSE: 0.000932 | Val MSE: 0.001082
+2026-10-26 14:37:34,409 | INFO | Ẩn 5 nơ-ron | Epoch 300/500 | Train MSE: 0.000934 | Val MSE: 0.001019
+2026-10-26 14:37:35,159 | INFO | Ẩn 5 nơ-ron | Epoch 350/500 | Train MSE: 0.000923 | Val MSE: 0.001040
+2026-10-26 14:37:35,929 | INFO | Ẩn 5 nơ-ron | Epoch 400/500 | Train MSE: 0.000933 | Val MSE: 0.001021
+2026-10-26 14:37:36,678 | INFO | Ẩn 5 nơ-ron | Epoch 450/500 | Train MSE: 0.000916 | Val MSE: 0.001026
+2026-10-26 14:37:37,429 | INFO | Ẩn 5 nơ-ron | Epoch 500/500 | Train MSE: 0.000924 | Val MSE: 0.001022
+2026-10-26 14:37:37,430 | INFO | Hoàn tất ẩn 5 nơ-ron | Best Val MSE: 0.001015 | Test MSE: 0.000819 | Test MAE: 0.022347 | Test RMSE: 0.028619 | Mô hình: expB_results/model_B_hid5.pth
+2026-10-26 14:37:37,431 | INFO | Bắt đầu huấn luyện mô hình có 6 nơ-ron ẩn.
+2026-10-26 14:37:37,449 | INFO | Ẩn 6 nơ-ron | Epoch 1/500 | Train MSE: 0.106031 | Val MSE: 0.086887
+2026-10-26 14:37:38,179 | INFO | Ẩn 6 nơ-ron | Epoch 50/500 | Train MSE: 0.002353 | Val MSE: 0.003026
+2026-10-26 14:37:38,930 | INFO | Ẩn 6 nơ-ron | Epoch 100/500 | Train MSE: 0.001093 | Val MSE: 0.001342
+2026-10-26 14:37:39,685 | INFO | Ẩn 6 nơ-ron | Epoch 150/500 | Train MSE: 0.000951 | Val MSE: 0.001111
+2026-10-26 14:37:40,440 | INFO | Ẩn 6 nơ-ron | Epoch 200/500 | Train MSE: 0.000928 | Val MSE: 0.001078
+2026-10-26 14:37:41,185 | INFO | Ẩn 6 nơ-ron | Epoch 250/500 | Train MSE: 0.000882 | Val MSE: 0.001067
+2026-10-26 14:37:41,931 | INFO | Ẩn 6 nơ-ron | Epoch 300/500 | Train MSE: 0.000877 | Val MSE: 0.000984
+2026-10-26 14:37:42,680 | INFO | Ẩn 6 nơ-ron | Epoch 350/500 | Train MSE: 0.000865 | Val MSE: 0.001030
+2026-10-26 14:37:43,439 | INFO | Ẩn 6 nơ-ron | Epoch 400/500 | Train MSE: 0.000858 | Val MSE: 0.000994
+2026-10-26 14:37:44,179 | INFO | Ẩn 6 nơ-ron | Epoch 450/500 | Train MSE: 0.000853 | Val MSE: 0.001008
+2026-10-26 14:37:44,934 | INFO | Ẩn 6 nơ-ron | Epoch 500/500 | Train MSE: 0.000845 | Val MSE: 0.000989
+2026-10-26 14:37:44,936 | INFO | Hoàn tất ẩn 6 nơ-ron | Best Val MSE: 0.000970 | Test MSE: 0.000886 | Test MAE: 0.022863 | Test RMSE: 0.029761 | Mô hình: expB_results/model_B_hid6.pth
+2026-10-26 14:37:44,936 | INFO | Bắt đầu huấn luyện mô hình có 7 nơ-ron ẩn.
+2026-10-26 14:37:44,953 | INFO | Ẩn 7 nơ-ron | Epoch 1/500 | Train MSE: 0.056143 | Val MSE: 0.037372
+2026-10-26 14:37:45,720 | INFO | Ẩn 7 nơ-ron | Epoch 50/500 | Train MSE: 0.001190 | Val MSE: 0.001347
+2026-10-26 14:37:46,481 | INFO | Ẩn 7 nơ-ron | Epoch 100/500 | Train MSE: 0.001061 | Val MSE: 0.001191
+2026-10-26 14:37:47,238 | INFO | Ẩn 7 nơ-ron | Epoch 150/500 | Train MSE: 0.000986 | Val MSE: 0.001107
+2026-10-26 14:37:47,990 | INFO | Ẩn 7 nơ-ron | Epoch 200/500 | Train MSE: 0.000961 | Val MSE: 0.001058
+2026-10-26 14:37:48,753 | INFO | Ẩn 7 nơ-ron | Epoch 250/500 | Train MSE: 0.000944 | Val MSE: 0.001089
+2026-10-26 14:37:49,510 | INFO | Ẩn 7 nơ-ron | Epoch 300/500 | Train MSE: 0.000917 | Val MSE: 0.001088
+2026-10-26 14:37:50,254 | INFO | Ẩn 7 nơ-ron | Epoch 350/500 | Train MSE: 0.000944 | Val MSE: 0.001059
+2026-10-26 14:37:51,006 | INFO | Ẩn 7 nơ-ron | Epoch 400/500 | Train MSE: 0.000930 | Val MSE: 0.001069
+2026-10-26 14:37:51,751 | INFO | Ẩn 7 nơ-ron | Epoch 450/500 | Train MSE: 0.000921 | Val MSE: 0.001088
+2026-10-26 14:37:52,500 | INFO | Ẩn 7 nơ-ron | Epoch 500/500 | Train MSE: 0.000915 | Val MSE: 0.001060
+2026-10-26 14:37:52,501 | INFO | Hoàn tất ẩn 7 nơ-ron | Best Val MSE: 0.001039 | Test MSE: 0.000598 | Test MAE: 0.019158 | Test RMSE: 0.024445 | Mô hình: expB_results/model_B_hid7.pth
+2026-10-26 14:37:52,502 | INFO | Bắt đầu huấn luyện mô hình có 8 nơ-ron ẩn.
+2026-10-26 14:37:52,520 | INFO | Ẩn 8 nơ-ron | Epoch 1/500 | Train MSE: 0.072819 | Val MSE: 0.051028
+2026-10-26 14:37:53,254 | INFO | Ẩn 8 nơ-ron | Epoch 50/500 | Train MSE: 0.001611 | Val MSE: 0.002013
+2026-10-26 14:37:54,003 | INFO | Ẩn 8 nơ-ron | Epoch 100/500 | Train MSE: 0.000819 | Val MSE: 0.000958
+2026-10-26 14:37:54,761 | INFO | Ẩn 8 nơ-ron | Epoch 150/500 | Train MSE: 0.000546 | Val MSE: 0.000691
+2026-10-26 14:37:55,515 | INFO | Ẩn 8 nơ-ron | Epoch 200/500 | Train MSE: 0.000507 | Val MSE: 0.000652
+2026-10-26 14:37:56,263 | INFO | Ẩn 8 nơ-ron | Epoch 250/500 | Train MSE: 0.000482 | Val MSE: 0.000631
+2026-10-26 14:37:57,005 | INFO | Ẩn 8 nơ-ron | Epoch 300/500 | Train MSE: 0.000465 | Val MSE: 0.000589
+2026-10-26 14:37:57,760 | INFO | Ẩn 8 nơ-ron | Epoch 350/500 | Train MSE: 0.000367 | Val MSE: 0.000460
+2026-10-26 14:37:58,511 | INFO | Ẩn 8 nơ-ron | Epoch 400/500 | Train MSE: 0.000310 | Val MSE: 0.000355
+2026-10-26 14:37:59,264 | INFO | Ẩn 8 nơ-ron | Epoch 450/500 | Train MSE: 0.000240 | Val MSE: 0.000277
+2026-10-26 14:38:00,017 | INFO | Ẩn 8 nơ-ron | Epoch 500/500 | Train MSE: 0.000181 | Val MSE: 0.000240
+2026-10-26 14:38:00,018 | INFO | Hoàn tất ẩn 8 nơ-ron | Best Val MSE: 0.000232 | Test MSE: 0.000179 | Test MAE: 0.009599 | Test RMSE: 0.013397 | Mô hình: expB_results/model_B_hid8.pth
+2026-10-26 14:38:00,019 | INFO | Bắt đầu huấn luyện mô hình có 9 nơ-ron ẩn.
+2026-10-26 14:38:00,038 | INFO | Ẩn 9 nơ-ron | Epoch 1/500 | Train MSE: 0.230632 | Val MSE: 0.167652
+2026-10-26 14:38:00,776 | INFO | Ẩn 9 nơ-ron | Epoch 50/500 | Train MSE: 0.001521 | Val MSE: 0.001927
+2026-10-26 14:38:01,571 | INFO | Ẩn 9 nơ-ron | Epoch 100/500 | Train MSE: 0.000982 | Val MSE: 0.001200
+2026-10-26 14:38:02,335 | INFO | Ẩn 9 nơ-ron | Epoch 150/500 | Train MSE: 0.000914 | Val MSE: 0.001082
+2026-10-26 14:38:03,089 | INFO | Ẩn 9 nơ-ron | Epoch 200/500 | Train MSE: 0.000898 | Val MSE: 0.001035
+2026-10-26 14:38:03,841 | INFO | Ẩn 9 nơ-ron | Epoch 250/500 | Train MSE: 0.000901 | Val MSE: 0.001027
+2026-10-26 14:38:04,600 | INFO | Ẩn 9 nơ-ron | Epoch 300/500 | Train MSE: 0.000876 | Val MSE: 0.000997
+2026-10-26 14:38:05,359 | INFO | Ẩn 9 nơ-ron | Epoch 350/500 | Train MSE: 0.000879 | Val MSE: 0.001030
+2026-10-26 14:38:06,118 | INFO | Ẩn 9 nơ-ron | Epoch 400/500 | Train MSE: 0.000863 | Val MSE: 0.000984
+2026-10-26 14:38:06,865 | INFO | Ẩn 9 nơ-ron | Epoch 450/500 | Train MSE: 0.000848 | Val MSE: 0.000983
+2026-10-26 14:38:07,629 | INFO | Ẩn 9 nơ-ron | Epoch 500/500 | Train MSE: 0.000823 | Val MSE: 0.000949
+2026-10-26 14:38:07,631 | INFO | Hoàn tất ẩn 9 nơ-ron | Best Val MSE: 0.000949 | Test MSE: 0.000864 | Test MAE: 0.023191 | Test RMSE: 0.029402 | Mô hình: expB_results/model_B_hid9.pth
+2026-10-26 14:38:07,631 | INFO | Bắt đầu huấn luyện mô hình có 10 nơ-ron ẩn.
+2026-10-26 14:38:07,646 | INFO | Ẩn 10 nơ-ron | Epoch 1/500 | Train MSE: 0.033007 | Val MSE: 0.015652
+2026-10-26 14:38:08,389 | INFO | Ẩn 10 nơ-ron | Epoch 50/500 | Train MSE: 0.000960 | Val MSE: 0.001104
+2026-10-26 14:38:09,150 | INFO | Ẩn 10 nơ-ron | Epoch 100/500 | Train MSE: 0.000813 | Val MSE: 0.000904
+2026-10-26 14:38:09,903 | INFO | Ẩn 10 nơ-ron | Epoch 150/500 | Train MSE: 0.000783 | Val MSE: 0.000872
+2026-10-26 14:38:10,665 | INFO | Ẩn 10 nơ-ron | Epoch 200/500 | Train MSE: 0.000768 | Val MSE: 0.000879
+2026-10-26 14:38:11,423 | INFO | Ẩn 10 nơ-ron | Epoch 250/500 | Train MSE: 0.000763 | Val MSE: 0.000859
+2026-10-26 14:38:12,174 | INFO | Ẩn 10 nơ-ron | Epoch 300/500 | Train MSE: 0.000773 | Val MSE: 0.000851
+2026-10-26 14:38:12,929 | INFO | Ẩn 10 nơ-ron | Epoch 350/500 | Train MSE: 0.000753 | Val MSE: 0.000817
+2026-10-26 14:38:13,681 | INFO | Ẩn 10 nơ-ron | Epoch 400/500 | Train MSE: 0.000746 | Val MSE: 0.000810
+2026-10-26 14:38:14,435 | INFO | Ẩn 10 nơ-ron | Epoch 450/500 | Train MSE: 0.000731 | Val MSE: 0.000812
+2026-10-26 14:38:15,190 | INFO | Ẩn 10 nơ-ron | Epoch 500/500 | Train MSE: 0.000734 | Val MSE: 0.000808
+2026-10-26 14:38:15,192 | INFO | Hoàn tất ẩn 10 nơ-ron | Best Val MSE: 0.000798 | Test MSE: 0.000801 | Test MAE: 0.020389 | Test RMSE: 0.028302 | Mô hình: expB_results/model_B_hid10.pth
+2026-10-26 14:38:15,203 | INFO | Đã lưu kết quả tóm tắt tại expB_results/expB_summary.csv
+2026-10-26 14:38:15,210 | INFO | Kết quả tóm tắt:
+ hidden_neurons  best_val_mse  test_mse  test_mae  test_rmse
+              1      0.004186  0.001815  0.032432   0.042601
+              2      0.003816  0.001618  0.028999   0.040219
+              3      0.001191  0.000668  0.019044   0.025841
+              4      0.001061  0.000645  0.019505   0.025394
+              5      0.001015  0.000819  0.022347   0.028619
+              6      0.000970  0.000886  0.022863   0.029761
+              7      0.001039  0.000598  0.019158   0.024445
+              8      0.000232  0.000179  0.009599   0.013397
+              9      0.000949  0.000864  0.023191   0.029402
+             10      0.000798  0.000801  0.020389   0.028302
+2026-10-26 14:38:15,328 | INFO | Đã lưu biểu đồ sai số.
+2026-10-26 14:38:15,535 | INFO | Đã lưu biểu đồ đường học.
+2026-10-26 14:38:16,048 | INFO | Đã lưu biểu đồ so sánh bề mặt.
+2026-10-26 14:38:16,049 | INFO | Hoàn tất thực nghiệm B. File log: expB_results\expB_run.log
