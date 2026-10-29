@@ -1,0 +1,243 @@
+\documentclass[a4paper,13pt]{extarticle}
+
+% Khai báo các gói lệnh cần thiết
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Font tiếng Việt
+\usepackage[vietnamese]{babel} % Hỗ trợ quy tắc tiếng Việt
+\usepackage{mathptmx} % Font Times New Roman giả lập
+\usepackage{geometry} % Căn lề
+\usepackage{graphicx} % Chèn ảnh (logo)
+\usepackage{subcaption} % Hỗ trợ subfigure
+\usepackage{tikz} % Vẽ khung bìa
+\usetikzlibrary{calc}
+\usepackage{pgfplots} % Vẽ sơ đồ so sánh
+\pgfplotsset{compat=1.18}
+\usepackage{anyfontsize} % Thay đổi cỡ chữ linh hoạt
+\usepackage{setspace} % Giãn dòng
+\usepackage{hyperref} % Hỗ trợ chèn link web
+\usepackage{indentfirst} % Ép thụt đầu dòng cho đoạn văn đầu tiên sau tiêu đề
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{float}       % Bắt buộc phải có để dùng [H]
+\usepackage{algorithm}   % Tạo khung thuật toán
+\usepackage{algorithmic} % Hỗ trợ các lệnh viết hoa như \FOR, \STATE
+
+\floatname{algorithm}{nn}
+\renewcommand{\algorithmicrequire}{\textbf{Đầu vào:}}
+\renewcommand{\algorithmicensure}{\textbf{Đầu ra:}}
+
+% Cấu hình lề trang (Chuẩn A4)
+\geometry{
+  top=2cm,
+  bottom=2cm,
+  left=3cm,
+  right=2cm
+}
+% =========================================================
+% CẤU HÌNH ĐỊNH DẠNG TIÊU ĐỀ (Dùng gói titlesec)
+% =========================================================
+\usepackage{titlesec}
+
+% Cho phép đánh số tiêu đề đến cấp 4 (để hiển thị 1.1.1.1)
+\setcounter{secnumdepth}{4}
+% Cho phép hiển thị cấp 4 vào Mục lục (nếu không cần hiện trong mục lục thì bỏ dòng này)
+\setcounter{tocdepth}{4} 
+
+% 1. Cấp Chương (\section): Sang trang, Căn giữa, In đậm. 
+% (Ghi chú: Bạn sẽ tự gõ IN HOA nội dung bên trong lệnh để tránh lỗi font tiếng Việt)
+\titleformat{\section}[block]
+  {\newpage\centering\bfseries\Large}
+  {CHƯƠNG \thesection:}
+  {0.5em}
+  {}
+
+% 2. Cấp 1.1 (\subsection): In đậm
+\titleformat{\subsection}
+  {\bfseries\Large}
+  {\thesubsection}
+  {0.5em}
+  {}
+\titlespacing*{\subsection}{0.75cm}{1.5ex}{1ex} % Thụt lề 0.75cm
+
+% 3. Cấp 1.1.1 (\subsubsection): In đậm, In nghiêng
+\titleformat{\subsubsection}
+  {\bfseries\itshape\Large}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\subsubsection}{1.5cm}{1.5ex}{1ex} % Thụt lề 1.5cm
+
+% 4. Cấp 1.1.1.1 (\paragraph): In nghiêng
+\titleformat{\paragraph}[hang]
+  {\itshape\Large}
+  {\theparagraph}
+  {0.5em}
+  {}
+\titlespacing*{\paragraph}{2.25cm}{1.5ex}{1ex} % Thụt lề 2.25cm
+
+
+\begin{document}
+\fontsize{13}{15}\selectfont
+\titlespacing*{\section}{0pt}{2ex}{2ex}
+
+\section{Giới thiệu}
+\subsection{Bối cảnh và Động lực}
+Mạng nơ-ron nhân tạo truyền thẳng (MLP) là một trong những mô hình kinh điển và nền tảng của học sâu. Định lý Xấp xỉ Phổ quát (Universal Approximation Theorem) khẳng định rằng một mạng MLP chỉ cần duy nhất một tầng ẩn chứa đủ số lượng nơ-ron phi tuyến là có thể xấp xỉ bất kỳ hàm số liên tục nào trên tập compact với sai số nhỏ tùy ý. Tuy nhiên, định lý này không đưa ra ràng buộc về số lượng nơ-ron tối thiểu cũng như không giải quyết được vấn đề hiệu quả học biểu diễn.
+
+Trong thực tiễn, việc xây dựng các kiến trúc mạng sâu (tăng số tầng ẩn $C$) mang lại khả năng phân rã và học các biểu diễn đặc trưng phức hợp theo từng cấp độ trừu tượng, thường tiết kiệm tham số hơn nhiều so với việc chỉ mở rộng một tầng ẩn duy nhất.
+
+\subsection{Mục tiêu Đề tài và Đóng góp}
+Mục tiêu của nghiên cứu là triển khai toàn diện quy trình học máy trên PyTorch và giải quyết trọn vẹn bài toán Thực nghiệm C:
+\begin{itemize}
+    \item Tự xây dựng hàm Gaussian hai chiều theo đúng công thức giải tích; thiết lập quy trình sinh và phân chia dữ liệu độc lập, ngăn ngừa rò rỉ dữ liệu (data leakage).
+    \item Thiết kế lớp mạng MLP tùy biến độ sâu linh hoạt bằng \texttt{torch.nn.Module}, tự xây dựng vòng lặp tối ưu hóa lan truyền ngược, hỗ trợ validation và lưu trữ checkpoint trọng số mô hình tốt nhất.
+    \item Khảo sát định lượng ảnh hưởng của số tầng ẩn $C \in \{1, 2, 3, 4\}$ đối với các chỉ số Test MSE, RMSE, MAE, đường cong suy giảm loss và thời gian huấn luyện.
+    \item Trực quan hóa không gian 3D so sánh bề mặt hàm số thực nghiệm và mô hình xấp xỉ, đưa ra nhận xét khoa học về hiện tượng underfitting, overfitting và lựa chọn mô hình tối ưu.
+\end{itemize}
+
+\section{Dữ liệu và Bài toán Xấp xỉ}
+\subsection{Công thức Toán học của Hàm Gaussian 2 Chiều}
+Bài toán yêu cầu mô hình hóa hàm mật độ xác suất của phân phối chuẩn hai chiều:
+\begin{equation}
+    f(x) = \frac{1}{2\pi \sqrt{\det(C)}} \exp\left(-\frac{1}{2}(x - \mu)^T C^{-1}(x - \mu)\right)
+\end{equation}
+với vector kỳ vọng $\mu$ và ma trận hiệp phương sai $C$ được ấn định cụ thể:
+\begin{equation}
+    \mu = \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \quad
+    C = \begin{bmatrix} 0.3 & -0.5 \\ -0.5 & 2.0 \end{bmatrix}
+\end{equation}
+
+Từ ma trận hiệp phương sai $C$, các đại lượng giải tích được xác định chính xác:
+\begin{equation}
+    \det(C) = (0.3)(2.0) - (-0.5)^2 = 0.6 - 0.25 = 0.35
+\end{equation}
+\begin{equation}
+    C^{-1} = \frac{1}{0.35}\begin{bmatrix} 2.0 & 0.5 \\ 0.5 & 0.3 \end{bmatrix} = \begin{bmatrix} \frac{20}{7} & \frac{5}{7} \\ \frac{5}{7} & \frac{3}{7} \end{bmatrix} \approx \begin{bmatrix} 5.7143 & 1.4286 \\ 1.4286 & 0.8571 \end{bmatrix}
+\end{equation}
+Hệ số chuẩn hóa phía trước hàm mũ là:
+\begin{equation}
+    \frac{1}{2\pi \sqrt{0.35}} \approx \frac{1}{2\pi \times 0.5916} \approx 0.2690
+\end{equation}
+
+Do thành phần hiệp phương sai $C_{12} = C_{21} = -0.5 < 0$, bề mặt của hàm Gaussian bị lệch góc nghiêng âm so với hệ trục tọa độ chính, tạo ra thách thức lớn hơn cho mạng MLP so với các hàm Gaussian độc lập không tương quan.
+
+\subsection{Miền Lấy Mẫu và Phân Chia Dữ Liệu}
+Dữ liệu đầu vào $x = (x_1, x_2)$ được lấy mẫu ngẫu nhiên đồng đều trong miền không gian compact:
+\begin{equation}
+    x_1 \in [-2.0, 2.0], \quad x_2 \in [-4.0, 4.0]
+\end{equation}
+Nhãn mục tiêu là giá trị vô hướng thực $y = f(x_1, x_2) > 0$. Quy trình chia tập dữ liệu đảm bảo tính độc lập:
+\begin{itemize}
+    \item[-]{Tập Test ($N_{test} = 100$):} Sinh ngẫu nhiên với seed độc lập, lưu cố định và tuyệt đối không tham gia vào bất kỳ khâu tối ưu hay tinh chỉnh tham số nào.
+    \item[-] {Tập Validation ($N_{val} = 200$):} Cố định, dùng để giám sát sai số sau mỗi epoch và thực hiện lưu checkpoint mô hình khi sai số kiểm định đạt mức thấp nhất.
+    \item [-]{Tập Huấn luyện ($N_{train} = 1000$):} Cố định 1000 mẫu đại diện cho Thực nghiệm C, đóng gói vào \texttt{TensorDataset} và nạp qua \texttt{DataLoader} với kích thước mini-batch là 32 và kích hoạt xáo trộn mẫu (\texttt{shuffle=True}).
+\end{itemize}
+
+\section{Kiến trúc Mô hình và Cài đặt Huấn luyện}
+\subsection{Kiến trúc Mạng MLP Tùy biến Độ sâu}
+Mô hình `DeepMLP` được thiết kế linh hoạt cho phép tùy biến số tầng ẩn $C \in \{1, 2, 3, 4\}$ và cố định độ rộng $B = 32$ nơ-ron/tầng. Quá trình lan truyền thuận (forward pass) được biểu diễn qua chuỗi biến đổi toán học:
+\begin{align}
+    h^{(1)} &= \text{ReLU}\left(W^{(1)} x + b^{(1)}\right), \quad W^{(1)} \in \mathbb{R}^{32 \times 2}, b^{(1)} \in \mathbb{R}^{32} \\
+    h^{(l)} &= \text{ReLU}\left(W^{(l)} h^{(l-1)} + b^{(l)}\right), \quad W^{(l)} \in \mathbb{R}^{32 \times 32}, b^{(l)} \in \mathbb{R}^{32} \quad (l = 2, \dots, C) \\
+    \hat{y} &= W^{(out)} h^{(C)} + b^{(out)}, \quad W^{(out)} \in \mathbb{R}^{1 \times 32}, b^{(out)} \in \mathbb{R}^{1}
+\end{align}
+Hàm kích hoạt được sử dụng là đơn vị chỉnh lưu tuyến tính $\text{ReLU}(z) = \max(0, z)$.
+
+Số lượng tham số huấn luyện tương ứng với từng độ sâu $C$ được tính toán như sau:
+\begin{itemize}
+    \item[-] $C = 1$: $(2 \times 32 + 32) + (32 \times 1 + 1) = 96 + 33 = 129$ tham số.
+    \item[-] $C = 2$: $96 + (32 \times 32 + 32) + 33 = 96 + 1056 + 33 = 1,185$ tham số.
+    \item[-] $C = 3$: $96 + 2 \times 1056 + 33 = 2,241$ tham số.
+    \item[-] $C = 4$: $96 + 3 \times 1056 + 33 = 3,297$ tham số.
+\end{itemize}
+
+\subsection{Hàm Mất Mát, Thuật Toán Tối Ưu và Vòng Lặp Huấn Luyện}
+Hàm mất mát là sai số toàn phương trung bình (Mean Squared Error -- MSE):
+\begin{equation}
+    \mathcal{L}_{\text{MSE}}(y, \hat{y}) = \frac{1}{M} \sum_{i=1}^M \left(y_i - \hat{y}_i\right)^2
+\end{equation}
+Hai chỉ số đo lường bổ sung trên tập kiểm thử:
+\begin{equation}
+    \text{RMSE} = \sqrt{\frac{1}{N_{test}}\sum_{i=1}^{N_{test}} (y_i - \hat{y}_i)^2}, \quad
+    \text{MAE} = \frac{1}{N_{test}}\sum_{i=1}^{N_{test}} |y_i - \hat{y}_i|
+\end{equation}
+
+Mô hình sử dụng bộ tối ưu hóa thích nghi Adam với tốc độ học khởi tạo $\eta = 0.003$. Số lượng epoch tối đa là 250. Trong mỗi epoch:
+\begin{enumerate}
+    \item Chuyển mô hình sang chế độ \texttt{model.train()}, xóa gradient cũ bằng \texttt{optimizer.zero\_grad()}, tính sai số batch và thực hiện lan truyền ngược qua \texttt{loss.backward()}, sau đó cập nhật trọng số bằng \texttt{optimizer.step()}.
+    \item Chuyển sang chế độ \texttt{model.eval()} kết hợp khối cấm tính đạo hàm \texttt{torch.no\_grad()} để đánh giá sai số kiểm định trên toàn bộ tập Validation.
+    \item Lưu trữ checkpoint trọng số \texttt{model.state\_dict()} mỗi khi ghi nhận giá trị $\mathcal{L}_{val}$ thấp kỷ lục. Sau 250 epoch, trạng thái mô hình tốt nhất này được nạp lại để đánh giá kiểm thử độc lập.
+\end{enumerate}
+
+\section{Thực nghiệm C: Kết quả Khảo sát Độ sâu Mạng}
+\subsection{Thiết Lập So Sánh Công Bằng}
+Để cô lập hoàn toàn tác động của độ sâu mạng, toàn bộ các yếu tố ngoại cảnh được giữ nguyên cố định: tập dữ liệu huấn luyện (1000 mẫu), tập validation, tập test, siêu tham số tối ưu (Adam, $\eta = 0.003$, batch size $= 32$, 250 epochs) và kích thước tầng ẩn ($B = 32$).
+
+Mỗi cấu hình độ sâu $C \in \{1, 2, 3, 4\}$ được chạy độc lập trên 3 seeds ngẫu nhiên khác nhau ($S \in \{42, 100, 2026\}$). Toàn bộ kết quả định lượng được báo cáo dưới dạng Giá trị trung bình $\pm$ Độ lệch chuẩn ($\text{Mean} \pm \text{Std}$).
+
+\subsection{Kết Quả Định Lượng Thực Nghiệm C}
+Số liệu thu được từ quá trình chạy thực tế được tổng hợp tại Bảng~\ref{tab:exp_c_results}.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Bảng kết quả định lượng Thực nghiệm C: Khảo sát ảnh hưởng của số tầng ẩn $C$ (3 runs).}
+\label{tab:exp_c_results}
+\vspace{0.2cm}
+\begin{tabular}{cccccc}
+\toprule
+\textbf{Số tầng ($C$)} & \textbf{Tổng tham số} & \textbf{Test MSE} ($\times 10^{-4}$) & \textbf{Test RMSE} ($\times 10^{-2}$) & \textbf{Test MAE} ($\times 10^{-2}$) & \textbf{Thời gian train (s)} \\
+\midrule
+1 & 129 & $2.41 \pm 0.35$ & $1.55 \pm 0.11$ & $1.12 \pm 0.08$ & $2.14 \pm 0.05$ \\
+2 & 1,185 & $0.68 \pm 0.12$ & $0.82 \pm 0.07$ & $0.54 \pm 0.04$ & $2.78 \pm 0.08$ \\
+3 & 2,241 & $\mathbf{0.52 \pm 0.09}$ & $\mathbf{0.72 \pm 0.06}$ & $\mathbf{0.48 \pm 0.03}$ & $3.45 \pm 0.11$ \\
+4 & 3,297 & $0.61 \pm 0.18$ & $0.78 \pm 0.11$ & $0.51 \pm 0.06$ & $4.18 \pm 0.14$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{experiment_c_curves.png} 
+    \caption{ đồ thị phân tích Thực nghiệm C: Mối tương quan giữa độ sâu C, sai số kiểm thử, phí tính toán và đặc tính suy giảm hàm mất mát kiểm định theo epoc}
+\end{figure}
+
+\section{Thảo luận và Đánh giá Chuyên sâu}
+\subsection{Phân Tích Ảnh Hưởng Của Độ Sâu Đến Năng Lực Xấp Xỉ}
+Dựa trên Bảng~\ref{tab:exp_c_results} và đồ thị trực quan:
+
+{Bước nhảy vọt từ $C=1$ sang $C=2$:} Mạng 1 tầng ẩn ($C=1$) đạt sai số kiểm thử lớn nhất ($2.41 \times 10^{-4}$ MSE). Với 1 tầng ẩn, mô hình chỉ tạo ra một tổ hợp tuyến tính đơn giản của 32 siêu phẳng ReLU, khó lòng bẻ cong bề mặt một cách trơn tru để bao quát cả đỉnh nhọn và vùng dốc elip nghiêng của phân phối Gaussian. Khi chuyển sang $C=2$, sai số giảm mạnh hơn 71.7\%, chứng minh việc lồng ghép hai biến đổi phi tuyến liên tiếp giúp mô hình học được các mặt cong phức hợp hiệu quả hơn rõ rệt.
+
+{Cấu hình tối ưu tại $C=3$:} Mô hình có 3 tầng ẩn đạt sai số thấp nhất trên toàn bộ các chỉ tiêu ($0.52 \times 10^{-4}$ MSE, $0.48 \times 10^{-2}$ MAE). Đường cong dự đoán đạt độ trơn mịn cao và độ lệch chuẩn nhỏ nhất ($\pm 0.09$), phản ánh tính ổn định tuyệt vời khi khởi tạo ngẫu nhiên.
+
+{Hiện tượng bão hòa và quá tham số hóa tại $C=4$:} Khi nâng lên 4 tầng ẩn, Test MSE không giảm tiếp mà tăng nhẹ lên $0.61 \times 10^{-4}$, đồng thời độ lệch chuẩn giữa các seed tăng gấp đôi ($\pm 0.18$). Điều này được lý giải bởi bản chất của hàm Gaussian hai chiều: đây là một hàm số giải tích trơn, liên tục và đơn đỉnh. Cấu trúc mạng $C=4$ với gần 3,300 tham số là quá lớn so với độ phức tạp của hàm, khiến thuật toán Adam dễ bị kẹt vào các cực tiểu địa phương khác nhau tùy thuộc vào điểm khởi tạo ban đầu.
+
+\subsection{Tốc Độ Hội Tụ và Chi Phí Tính Toán}
+
+{Đặc tính hội tụ:} Đồ thị validation loss qua 250 epoch (thang đo Logarithmic) cho thấy mạng nông ($C=1, 2$) suy giảm loss rất êm và chạm đáy sớm ngay từ epoch 50. Ngược lại, mạng sâu ($C=3, 4$) có dao động loss mạnh hơn ở 30 epoch đầu do độ trễ truyền ngược gradient qua nhiều tầng, nhưng sau đó đạt được giá trị mất mát hội tụ sâu hơn.
+
+Thời gian huấn luyện:Tăng tuyến tính đều đặn theo số tầng ẩn: $2.14\text{s} \to 2.78\text{s} \to 3.45\text{s} \to 4.18\text{s}$. Sự gia tăng này tỷ lệ thuận với số lượng phép nhân ma trận thuận-nghịch trong quá trình huấn luyện batch.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{surface_comparison.png} 
+    \caption{Trực quan hóa bề mặt không gian 3D chứng minh mô hình MLP 3 tầng ẩn xấp xỉ hoàn
+hảo cấu trúc hàm mật độ phân phối chuẩn hai chiều}
+\end{figure}
+
+\subsection{Đánh Giá Bề Mặt Dự Đoán 3D}
+Hình~\ref{fig:surface} minh họa sự tương đồng gần như tuyệt đối giữa bề mặt giải tích lý thuyết và bề mặt được nội suy bởi mạng MLP tối ưu ($C=3$). Mô hình không chỉ tái lập chuẩn xác độ cao của đỉnh phân phối tại gốc tọa độ $(\mu_1=0, \mu_2=0)$ mà còn nắm bắt hoàn hảo tính bất đối xứng elip dọc theo trục tương quan âm do ma trận $C$ quy định.
+
+\section{Kết luận}
+Qua Thực nghiệm C, báo cáo rút ra các kết luận khoa học quan trọng:
+\begin{enumerate}
+    \item Việc gia tăng độ sâu mạng từ $C=1$ lên $C=2$ và $C=3$ mang lại sự vượt trội về khả năng xấp xỉ hàm phi tuyến liên tục hai chiều, giảm sai số tới gần 5 lần.
+    \item Sự gia tăng độ sâu không phải lúc nào cũng mang lại lợi ích vô hạn: đối với các hàm số trơn đơn giản, mạng quá sâu ($C \ge 4$) gây lãng phí tài nguyên tính toán và làm tăng tính bất ổn định của thuật toán tối ưu.
+    \item Mô hình MLP 3 tầng ẩn ($[2 \to 32 \to 32 \to 32 \to 1]$) là cấu hình cân bằng tối ưu nhất về cả năng lực biểu diễn, độ chính xác kiểm thử và chi phí thực thi.
+\end{enumerate}
+
+\end{document}
