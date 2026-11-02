@@ -1,0 +1,10 @@
+torch>=2.0
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+matplotlib>=3.7
+# --- chỉ cần để dựng báo cáo (.docx) và slide (.pptx) ---
+python-docx>=1.0
+python-pptx>=0.6.23
+# --- tùy chọn: chạy notebook ---
+jupyter
