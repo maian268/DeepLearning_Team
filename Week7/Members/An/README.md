@@ -16,11 +16,17 @@ Chọn checkpoint theo validation MSE; sau đó đánh giá trên tập test. C�
 Cấu trúc thư mục
 
 BTL/
+
 ├── README_A.md
+
 ├── requirements.txt
+
 ├── BTL01_DuLieu_ThucNghiemA.ipynb
+
 └── outputs_A/
+
     ├── data/
+    
     │   ├── train_pool.csv
     │   ├── val.csv
     │   └── test.csv
