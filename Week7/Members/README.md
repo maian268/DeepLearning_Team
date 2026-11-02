@@ -1,3 +1,4 @@
+# PHÂN CHIA CÔNG VIỆC NHÓM TUẦN 7
 1. An: Dữ liệu + thực nghiệm A
 
 Khảo sát số lượng mẫu huấn luyện
