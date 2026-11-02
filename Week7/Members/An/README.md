@@ -1,4 +1,4 @@
-Dữ liệu và Thực nghiệm A – Ảnh hưởng số mẫu huấn luyện đến MLP
+# Dữ liệu và Thực nghiệm A – Ảnh hưởng số mẫu huấn luyện đến MLP
 Mô tả
 
 Phần này gồm hai việc: (1) sinh, chia và khảo sát dữ liệu Gaussian hai chiều; (2) Thực nghiệm A khảo sát ảnh hưởng của số mẫu huấn luyện (từ 200 đến 2.000, 10 mức) đến khả năng xấp xỉ hàm mật độ Gaussian hai chiều của mạng MLP viết bằng PyTorch. Toàn bộ mã, giải thích từng bước, bảng sai số và biểu đồ nằm trong BTL01_DuLieu_ThucNghiemA.ipynb.
