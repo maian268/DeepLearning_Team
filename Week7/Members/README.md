@@ -7,11 +7,11 @@ Code
 - Tự viết hàm Gaussian, sinh dữ liệu và chia train/validation/test.
 
 - Tự xây dựng MLP và vòng lặp huấn luyện bằng PyTorch
-- 
+  
 - Chạy thực nghiệm A với 10 mức dữ liệu từ 200 đến 2.000 mẫu.
-- 
+  
 - Xuất CSV, bảng sai số, biểu đồ và mô hình tốt nhất.
-- 
+  
 Báo cáo: Bài toán, dữ liệu, phương pháp và kết quả A.
 Slide: Bài toán, dữ liệu và biểu đồ A.
 2. @Quyên : Thực nghiệm B
