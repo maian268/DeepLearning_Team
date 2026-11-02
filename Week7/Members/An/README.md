@@ -14,6 +14,7 @@ Chuẩn hóa: x / (2, 4) và y / f(μ) (hằng số theo miền và theo hàm, k
 Huấn luyện: batch size 32, tối đa 500 epochs, Adam với learning rate 0.003, hàm mất mát MSE, dừng sớm theo validation (patience 50).
 Chọn checkpoint theo validation MSE; sau đó đánh giá trên tập test. Các chỉ số được lưu gồm MSE, RMSE, MAE và R². Mô hình tốt nhất toàn thực nghiệm cũng chọn theo validation, test không dùng để chọn cấu hình.
 Cấu trúc thư mục
+
 BTL/
 ├── README_A.md
 ├── requirements.txt
