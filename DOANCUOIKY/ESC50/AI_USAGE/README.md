@@ -8,7 +8,6 @@ Mọi nội dung AI hỗ trợ đều được thành viên phụ trách đọc 
 ### An
 | Công cụ | Dùng cho việc | Phần trong đề tài | Cách kiểm chứng |
 |---|---|---|---|
-| (ví dụ: Claude) | Lên dàn ý báo cáo, gợi ý thông số | Báo cáo, configs | Đối chiếu với README ESC-50, nhóm tự chốt thông số |
 
 ### Quyên
 | Công cụ | Dùng cho việc | Phần trong đề tài | Cách kiểm chứng |
