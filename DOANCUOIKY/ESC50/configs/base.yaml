@@ -1,1 +1,16 @@
-
+seed: 42
+batch_size: 32
+max_epochs: 60
+optimizer: Adam
+lr: 0.001
+weight_decay: 0.0001
+scheduler: ReduceLROnPlateau
+sched_factor: 0.5
+sched_patience: 4
+min_lr: 0.00001
+early_stop_patience: 10
+monitor: val_loss
+grad_clip: 5.0
+dropout: 0.3
+label_smoothing: 0.0
+amp: true
