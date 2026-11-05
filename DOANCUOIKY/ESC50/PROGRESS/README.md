@@ -17,8 +17,6 @@ Mỗi việc ghi rõ đầu vào lấy từ đâu, đầu ra là file nào ở �
 
 - Sheet 3 – Quy trình A-Z
 
-Đây là phần “từ tải dataset đến cuối cùng” của bạn:
-
 Bước 1: mở trang repo, tải master.zip (~600 MB), giải nén ra ESC-50-master/ rồi upload lên MyDrive/esc50/data/.
 Các bước sau: tạo repo và nhánh, cell mở đầu mọi notebook trên Colab (kèm lệnh), tạo cache log-Mel, chạy 25 kết quả song song, họp giữa kỳ, viết báo cáo, ghép slide, gắn tag v1.0 và checklist nộp bài.
 
