@@ -1,1 +1,14 @@
-
+torch
+torchaudio
+soundfile
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib
+seaborn
+pyyaml
+tqdm
+openpyxl
+streamlit
+pytest
