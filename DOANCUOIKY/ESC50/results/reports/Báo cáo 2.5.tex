@@ -1,0 +1,94 @@
+\documentclass[a4paper,13pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}        % Font tiếng Việt
+\usepackage[vietnamese]{babel}  % Hỗ trợ quy tắc tiếng Việt
+\usepackage{mathptmx}         % Font Times New Roman
+\usepackage{geometry}         % Căn lề
+\usepackage{anyfontsize}       % Thay đổi cỡ chữ linh hoạt
+\usepackage{setspace}          % Giãn dòng
+\usepackage{indentfirst}       % Thụt đầu dòng cho đoạn văn đầu tiên
+\usepackage{amsmath}           % Công thức toán học
+\usepackage{amsfonts}          % Hỗ trợ tập hợp toán học \mathbb{R}
+% Cấu hình lề trang (Chuẩn A4)
+\geometry{
+  top=3cm,
+  bottom=3.5cm,
+  left=3cm,
+  right=2cm
+}
+\usepackage{titlesec}
+
+% Cho phép đánh số tiêu đề đến cấp 4
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4} 
+
+% 1. Cấp Chương (\section)
+\titleformat{\section}[block]
+  {\newpage\centering\bfseries\Large}
+  {CHƯƠNG \thesection:}
+  {0.5em}
+  {}
+
+% 2. Cấp 1.1 (\subsection)
+\titleformat{\subsection}
+  {\bfseries\Large}
+  {\thesubsection}
+  {0.5em}
+  {}
+\titlespacing*{\subsection}{0.75cm}{1.5ex}{1ex}
+
+% 3. Cấp 1.1.1 (\subsubsection)
+\titleformat{\subsubsection}
+  {\bfseries\itshape\Large}
+  {\thesubsubsection}
+  {0.5em}
+  {}
+\titlespacing*{\subsubsection}{1.5cm}{1.5ex}{1ex}
+
+\begin{document}
+
+
+\subsection{Mạng hồi quy GRU và kiến trúc CRNN}
+
+\subsubsection{Mạng nơ-ron hồi quy GRU (Gated Recurrent Unit)}
+Trong phân loại tín hiệu âm thanh dựa trên ảnh phổ (Spectrogram), biểu diễn Log-Mel không chỉ mang thông tin tần số - không gian cục bộ mà còn có tính chất chuỗi theo thời gian. Các mạng hồi quy giúp mô hình hóa phụ thuộc chuỗi dài đó. 
+
+Gated Recurrent Unit (GRU) là một biến thể của mạng hồi quy RNN giúp giải quyết triệt để hiện tượng triệt tiêu đạo hàm (vanishing gradient). GRU tối ưu hóa kiến trúc so với LSTM bằng cách sử dụng 2 cổng chính:
+\begin{itemize}
+    \item[-] {Cổng cập nhật (Update Gate $z_t$):} Kiểm soát lượng thông tin từ trạng thái ẩn quá khứ $h_{t-1}$ được giữ lại cho bước thời gian hiện tại:
+    \begin{equation*}
+        z_t = \sigma(W_z \cdot [h_{t-1}, x_t] + b_z)
+    \end{equation*}
+    \item[-] {Cổng đặt lại (Reset Gate $r_t$):} Quyết định lượng thông tin quá khứ cần bỏ qua khi tính toán trạng thái ứng viên:
+    \begin{equation*}
+        r_t = \sigma(W_r \cdot [h_{t-1}, x_t] + b_r)
+    \end{equation*}
+    \item[-] {Trạng thái ẩn ứng viên ($\tilde{h}_t$) và trạng thái ẩn chính thức ($h_t$):}
+    \begin{equation*}
+        \tilde{h}_t = \tanh(W \cdot [r_t \odot h_{t-1}, x_t] + b)
+    \end{equation*}
+    \begin{equation*}
+        h_t = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t
+    \end{equation*}
+\end{itemize}
+
+Để tổng hợp thông tin ngữ cảnh theo cả hai chiều thời gian (quá khứ và tương lai), mô hình sử dụng mạng {BiGRU (Bidirectional GRU)}. Vector đầu ra tại bước $t$ là sự nối tiếp của hai hướng xử lý:
+\begin{equation*}
+    h_t^{bi} = [\overrightarrow{h}_t \,;\, \overleftarrow{h}_t] \in \mathbb{R}^{2 \cdot \text{hidden\_size}}
+\end{equation*}
+
+\subsubsection{Kiến trúc tổng thể của mô hình CRNN}
+Mô hình CRNN (Convolutional Recurrent Neural Network) kết hợp khả năng trích xuất đặc trưng hình thái cục bộ của CNN 2D với khả năng học ngữ cảnh chuỗi thời gian của BiGRU theo luồng xử lý gồm 6 giai đoạn:
+
+\begin{enumerate}
+    \item {CNN Feature Extractor:} Gồm 3 khối \texttt{ConvBlock} xếp chồng. Mỗi khối chứa 2 tầng tích chập $3 \times 3$ (kèm BatchNorm2d và kích hoạt ReLU), kết thúc bằng \texttt{MaxPool2d(2, 2)}. Số kênh trích xuất tăng dần qua các tầng ($1 \to 32 \to 64 \to 128$). Qua 3 lần MaxPool, kích thước trục tần số giảm 8 lần ($\frac{n\_mels}{8}$) và trục thời gian giảm 8 lần ($\frac{T}{8}$).
+    \item {Permute \& Reshape:} Tensor 4D đầu ra của CNN có dạng $[B, C, F, T']$ được biến đổi trục thành $[B, T', C, F]$ và gộp thành dạng chuỗi 3D $[B, T', C \cdot F]$.
+    \item {Linear Projection:} Áp dụng lớp \texttt{Linear(C * F, 128)} kết hợp \texttt{ReLU} và \texttt{Dropout(0.3)} tại mỗi bước thời gian để nén đặc trưng về không gian 128 chiều cố định.
+    \item {BiGRU Sequence Learning:} Bộ BiGRU gồm 2 tầng xếp chồng (\texttt{num\_layers=2}) với \texttt{hidden\_size=128}. Vector đầu ra tại mỗi khung thời gian chứa 256 chiều.
+    \item {Temporal Global Average Pooling (TGAP):} Lấy giá trị trung bình trên toàn bộ trục thời gian $T'$ để thu được vector đại diện duy nhất cho đoạn âm thanh:
+    \begin{equation}
+        {h}_{pooled} = \frac{1}{T'} \sum_{t=1}^{T'} {h}_t^{bi} \in {R}^{256}
+    \end{equation}
+    \item {Classifier Head:} Vector 256 chiều được đưa qua tầng \texttt{Dropout(0.3)} và lớp tuyến tính \texttt{Linear(256, 50)} để tạo ra logits cho 50 lớp âm thanh của ESC-50.
+\end{enumerate}
+\end{document}
