@@ -1,0 +1,2 @@
+﻿_sig,Thời gian,Tên tệp,Mô hình,Dự đoán Top-1,Độ tin cậy (%),Trạng thái
+1-100032-A-0.wav_crnn_128_vacuum_cleaner_0.0855,22:10:11,1-100032-A-0.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp

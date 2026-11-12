@@ -6,6 +6,7 @@ Ghi chú: Các vị trí cần nhóm hoàn thiện/nối code được đánh d�
 """
 
 import sys
+import io
 from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,6 +56,38 @@ MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 # Đường dẫn tới 2 tấm ảnh cảnh báo
 IMG_INVALID_FORMAT = "app/Assets/Thông báo sai định dạng.png"
 IMG_FILE_TOO_LARGE = "app/Assets/Thông báo vượt giới hạn dung lượng tệp.png"
+SAMPLE_DIR = PROJECT_ROOT / "app" / "Assets" / "samples"
+HISTORY_FILE = PROJECT_ROOT / "app" / "history.csv"
+
+# CÁC HÀM TIỆN ÍCH & KHỞI TẠO SESSION STATE
+def get_image_base64(img_path: Path) -> str:
+    with open(img_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+def load_history() -> list:
+    if HISTORY_FILE.exists():
+        try:
+            return pd.read_csv(HISTORY_FILE).to_dict(orient="records")
+        except Exception:
+            return []
+    return []
+
+def save_history(history_list: list):
+    if len(history_list) > 0:
+        df = pd.DataFrame(history_list)
+        df.to_csv(HISTORY_FILE, index=False, encoding="utf-8-sig")
+    elif HISTORY_FILE.exists():
+        HISTORY_FILE.unlink()
+if "prediction_history" not in st.session_state:
+    st.session_state.prediction_history = load_history()
+if "dismissed_error_for" not in st.session_state:
+    st.session_state.dismissed_error_for = None
+if "uploader_key" not in st.session_state:
+    st.session_state.uploader_key = 0
+
+def reset_uploader():
+    st.session_state.dismissed_error_for = None
+    st.session_state.uploader_key += 1    
+# KHỞI TẠO GIAO DIỆN 
 
 st.set_page_config(
     page_title="ESC-50 Audio Classifier",
@@ -65,11 +98,6 @@ st.set_page_config(
 st.title("🎵 ESC-50 Audio Classification Demo")
 st.markdown("Ứng dụng phân loại 50 lớp âm thanh môi trường sử dụng **CNN** và **CRNN**.")
 
-
-
-# =========================================================
-# SIDEBAR: CẤU HÌNH MÔ HÌNH VÀ TẢI CHECKPOINT
-# =========================================================
 st.sidebar.header("⚙️ Cấu hình Mô hình")
 
 arch_choice = st.sidebar.selectbox(
@@ -133,67 +161,77 @@ if load_status_msg:
 else:
     st.sidebar.success(f"✅ Đã nạp thành công mô hình `{arch_choice.upper()}` ({n_mels_choice} bins).")
 
-# =========================================================
-# PHẦN CHÍNH: UPLOAD VÀ XỬ LÝ ÂM THANH
-# =========================================================
-# Hàm phụ trợ đọc ảnh sang chuỗi Base64
-def get_image_base64(img_path: str) -> str:
-    with open(img_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+# BƯỚC 1: CHỌN NGUỒN TỆP ÂM THANH
+st.subheader("1. Chọn nguồn tệp âm thanh (.wav)")
 
-# Khởi tạo trạng thái lưu vết lỗi đã tắt hay chưa
-if "dismissed_error_for" not in st.session_state:
-    st.session_state.dismissed_error_for = None
-if "uploader_key" not in st.session_state:
-    st.session_state.uploader_key = 0
+tab_upload, tab_sample = st.tabs([
+    "📤 Tải tệp lên từ máy tính",
+    "📁 Chọn từ tệp mẫu cố định"
+])
 
-def reset_uploader():
-    st.session_state.dismissed_error_for = None
-    st.session_state.uploader_key += 1
+active_file_name = None
+active_file_size = 0
+active_file_buffer = None
 
-# Khởi tạo danh sách lưu lịch sử phân loại trong phiên làm việc
-if "prediction_history" not in st.session_state:
-    st.session_state.prediction_history = []
+# --- MỤC 1: TẢI LÊN TỪ TRÊN MÁY ---
+with tab_upload:
+    uploaded_file = st.file_uploader(
+        "Vui lòng chọn 1 file WAV âm thanh 5 giây (Chỉ hỗ trợ định dạng .wav, tối đa 10MB):",
+        type=None,
+        key=f"audio_uploader_{st.session_state.uploader_key}"
+    )
 
-# ---------------------------------------------------------
-# BƯỚC 1: TẢI LÊN TỆP ÂM THANH
-# ---------------------------------------------------------
-st.subheader("Tải lên tệp âm thanh (.wav)")
+    # JS giữ cố định bộ lọc .wav mặc định trên hộp thoại Windows
+    components.html(
+        """
+        <script>
+        const doc = window.parent.document;
+        function enforceWavAccept() {
+            const inputs = doc.querySelectorAll('input[type="file"]');
+            inputs.forEach(input => {
+                if (input.getAttribute('accept') !== '.wav') {
+                    input.setAttribute('accept', '.wav');
+                }
+            });
+        }
+        enforceWavAccept();
+        const observer = new MutationObserver(enforceWavAccept);
+        observer.observe(doc.body, { childList: true, subtree: true });
+        </script>
+        """,
+        height=0
+    )
 
-uploaded_file = st.file_uploader(
-    "Vui lòng chọn 1 file WAV âm thanh 5 giây (Chỉ hỗ trợ định dạng .wav, tối đa 10MB):",
-    type=None,
-    key=f"audio_uploader_{st.session_state.uploader_key}"
-)
+    if uploaded_file is not None:
+        active_file_name = uploaded_file.name
+        active_file_size = uploaded_file.size
+        active_file_buffer = io.BytesIO(uploaded_file.getvalue())
 
-# JS ép hộp thoại Windows mặc định chỉ hiện file .wav
-# JS theo dõi liên tục và giữ cố định bộ lọc .wav trên hộp thoại chọn file
-components.html(
-    """
-    <script>
-    const doc = window.parent.document;
-    function enforceWavAccept() {
-        const inputs = doc.querySelectorAll('input[type="file"]');
-        inputs.forEach(input => {
-            if (input.getAttribute('accept') !== '.wav') {
-                input.setAttribute('accept', '.wav');
-            }
-        });
-    }
-    enforceWavAccept();
-    const observer = new MutationObserver(enforceWavAccept);
-    observer.observe(doc.body, { childList: true, subtree: true });
-    </script>
-    """,
-    height=0
-)
-col_left, col_right = st.columns([1, 1])
+# --- MỤC 2: CHỌN TỪ TỆP MẪU CỐ ĐỊNH ---
+with tab_sample:
+    sample_options = ["-- Chọn một tệp âm thanh mẫu để thử nghiệm --"]
+    if SAMPLE_DIR.exists():
+        sample_options += sorted([f.name for f in SAMPLE_DIR.glob("*.wav")])
 
-if uploaded_file is not None:
-    file_name = uploaded_file.name
-    file_size = uploaded_file.size
-    file_id = f"{file_name}_{file_size}"
+    selected_sample = st.selectbox(
+        "Danh sách các tệp mẫu có sẵn trong hệ thống:",
+        options=sample_options
+    )
 
+    if selected_sample != "-- Chọn một tệp âm thanh mẫu để thử nghiệm --":
+        sample_path = SAMPLE_DIR / selected_sample
+        if sample_path.exists():
+            active_file_name = sample_path.name
+            active_file_size = sample_path.stat().st_size
+            with open(sample_path, "rb") as f:
+                active_file_buffer = io.BytesIO(f.read())
+    elif not SAMPLE_DIR.exists() or len(sample_options) == 1:
+        st.caption("💡 *Gợi ý: Đặt các file `.wav` mẫu vào thư mục `app/Assets/samples/` để hiển thị tại đây.*")
+col_left, col_right = st.columns ( [1,1])
+if active_file_buffer is not None:
+    file_name = active_file_name
+    file_size = active_file_size
+    file_id = f"{ file_name}_{file_size}"
     # ---------------------------------------------------------
     # BƯỚC 2: KIỂM TRA LỖI (QUÁ DUNG LƯỢNG / SAI ĐỊNH DẠNG)
     # ---------------------------------------------------------
@@ -280,7 +318,7 @@ if uploaded_file is not None:
                     st.error(f"❌ Tệp không hợp lệ ({error_reason}). Vui lòng chọn lại file .wav!")
 
             # TRƯỜNG HỢP B: ĐÃ BẤM VÀO DẤU X TRÊN ẢNH -> TẮT ẢNH & HIỆN CÂU NHẮC NHẬP LẠI + NÚT UPLOAD
-           # TRƯỜNG HỢP B: ĐÃ BẤM VÀO DẤU X TRÊN ẢNH -> HIỆN NHẮC NHỞ + NÚT MỞ THẲNG HỘP THOẠI CHỌN FILE
+            # TRƯỜNG HỢP B: ĐÃ BẤM VÀO DẤU X TRÊN ẢNH -> HIỆN NHẮC NHỞ + NÚT MỞ THẲNG HỘP THOẠI CHỌN FILE
             else:
                 st.warning(f"⚠️ Tệp vừa tải lên bị lỗi do **{error_reason}**. **Vui lòng nhập lại tệp âm thanh định dạng `.wav` hợp lệ!**")
                 
@@ -383,19 +421,20 @@ if uploaded_file is not None:
             top1_class = ESC50_CLASSES[top1_index]
             top1_prob = probs[top1_index]
         # Tạo mã định danh duy nhất cho lần chạy này (tên file + cấu hình mô hình)
-        run_signature = f"{file_name}_{arch_choice}_{n_mels_choice}_{top1_class}_{top1_prob:.4f}"
+            run_signature = f"{file_name}_{arch_choice}_{n_mels_choice}_{top1_class}_{top1_prob:.4f}"
 
         # Chỉ lưu nếu bản ghi này chưa nằm ở dòng mới nhất (tránh trùng lặp khi rerun)
-        if not st.session_state.prediction_history or st.session_state.prediction_history[0]["_sig"] != run_signature:
-            st.session_state.prediction_history.insert(0, {
-                "_sig": run_signature,
-                "Thời gian": datetime.now().strftime("%H:%M:%S"),
-                "Tên tệp": file_name,
-                "Mô hình": f"{arch_choice.upper()} ({n_mels_choice} bins)",
-                "Dự đoán Top-1": top1_class,
-                "Độ tin cậy (%)": round(float(top1_prob * 100), 2),
-                "Trạng thái": "⚠️ Tin cậy thấp" if top1_prob < threshold_input else "✅ Đạt ngưỡng"
-            })
+            if not st.session_state.prediction_history or st.session_state.prediction_history[0]["_sig"] != run_signature:
+                st.session_state.prediction_history.insert(0, {
+                    "_sig": run_signature,
+                    "Thời gian": datetime.now().strftime("%H:%M:%S"),
+                    "Tên tệp": file_name,
+                    "Mô hình": f"{arch_choice.upper()} ({n_mels_choice} bins)",
+                    "Dự đoán Top-1": top1_class,
+                    "Độ tin cậy (%)": round(float(top1_prob * 100), 2),
+                    "Trạng thái": "⚠️ Tin cậy thấp" if top1_prob < threshold_input else "✅ Đạt ngưỡng"
+                })
+                save_history(st.session_state.prediction_history)
             st.metric(
                 label="Nhãn dự đoán cao nhất (Top-1):",
                 value=top1_class.upper(),
