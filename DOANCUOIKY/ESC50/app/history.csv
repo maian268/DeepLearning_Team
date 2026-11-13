@@ -1,2 +1,3 @@
-﻿_sig,Thời gian,Tên tệp,Mô hình,Dự đoán Top-1,Độ tin cậy (%),Trạng thái
-1-100032-A-0.wav_crnn_128_vacuum_cleaner_0.0855,22:10:11,1-100032-A-0.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp
+﻿_sig,Ngày,Giờ,Tên tệp,Mô hình,Dự đoán Top-1,Độ tin cậy (%),Trạng thái
+1-155858-B-25.wav_crnn_128_vacuum_cleaner_0.0855,13/11/2026,15:05:53,1-155858-B-25.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp
+1-105224-A-22.wav_crnn_128_vacuum_cleaner_0.0855,13/11/2026,14:51:16,1-105224-A-22.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp

@@ -82,7 +82,8 @@ if "dismissed_error_for" not in st.session_state:
     st.session_state.dismissed_error_for = None
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = 0
-
+if "confirm_clear_history" not in st.session_state:
+    st.session_state.confirm_clear_history = False
 def reset_uploader():
     st.session_state.dismissed_error_for = None
     st.session_state.uploader_key += 1    
@@ -98,6 +99,44 @@ st.title("🎵 ESC-50 Audio Classification Demo")
 st.markdown("Ứng dụng phân loại 50 lớp âm thanh môi trường sử dụng **CNN** và **CRNN**.")
 
 st.sidebar.header("⚙️ Cấu hình Mô hình")
+
+colorblind_mode = st.sidebar.toggle(
+    "🎨  Chế độ hỗ trợ người mù màu",
+    value=False,
+    help="Chuyển sang bảng màu Cividis/Okabe-Ito tương phản cao, thân thiện với người khiếm khuyết thị giác màu."
+)
+
+# Thiết lập bảng màu động theo chế độ
+if colorblind_mode:
+    st.markdown(
+        """
+        <style>
+        /* Tăng độ tương phản viền và chữ cho chế độ mù màu (tương thích cả Light & Dark mode) */
+        div[data-testid="stMetric"] {
+            border: 2.5px solid #0072B2;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #EBF5FB !important;
+        }
+        div[data-testid="stMetric"] label,
+        div[data-testid="stMetric"] [data-testid="stMetricLabel"] *,
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] * {
+            color: #002B49 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    MEL_CMAP = "cividis"          # Bảng màu khoa học tối ưu cho người mù màu
+    WAVE_COLOR = "#D55E00"        # Cam đất đậm Okabe-Ito (nổi bật trên cả nền trắng và nền tối)
+    BAR_TOP1_COLOR = "#E69F00"    # Cam vàng nổi bật cho Top-1
+    BAR_OTHER_COLOR = "#56B4E9"   # Xanh nhạt cho Top 2-5
+else:
+    MEL_CMAP = "viridis"
+    WAVE_COLOR = "#1f77b4"
+    BAR_TOP1_COLOR = "#1f77b4"
+    BAR_OTHER_COLOR = "#1f77b4"
+
 
 arch_choice = st.sidebar.selectbox(
     "1. Chọn kiến trúc mô hình (arch):",
@@ -395,7 +434,7 @@ if active_file_buffer is not None:
                 time_axis = np.linspace(0, len(waveform) / sample_rate, num=len(waveform))
 
                 fig_wave, ax_wave = plt.subplots(figsize=(6, 2.2))
-                ax_wave.plot(time_axis, waveform, color="#1f77b4", linewidth=0.6)
+                ax_wave.plot(time_axis, waveform, color=WAVE_COLOR, linewidth=0.6)
                 ax_wave.set_title(f"Waveform ({sample_rate} Hz, {len(waveform)/sample_rate:.2f}s)")
                 ax_wave.set_xlabel("Thời gian (giây)")
                 ax_wave.set_ylabel("Biên độ")
@@ -426,7 +465,7 @@ if active_file_buffer is not None:
         with col_left:
             st.markdown("#### 📊 Log-Mel Spectrogram")
             fig_mel, ax_mel = plt.subplots(figsize=(6, 3.5))
-            cax = ax_mel.imshow(mel_spec, aspect='auto', origin='lower', cmap='viridis')
+            cax = ax_mel.imshow(mel_spec, aspect='auto', origin='lower', cmap=MEL_CMAP)
             fig_mel.colorbar(cax, ax=ax_mel, format="%+2.0f dB")
             ax_mel.set_title(f"Log-Mel Spectrogram ({n_mels_choice} Mel bins)")
             ax_mel.set_xlabel("Time Frames")
@@ -460,9 +499,11 @@ if active_file_buffer is not None:
 
         # Chỉ lưu nếu bản ghi này chưa nằm ở dòng mới nhất (tránh trùng lặp khi rerun)
             if not st.session_state.prediction_history or st.session_state.prediction_history[0]["_sig"] != run_signature:
+                now = datetime.now()
                 st.session_state.prediction_history.insert(0, {
                     "_sig": run_signature,
-                    "Thời gian": datetime.now().strftime("%H:%M:%S"),
+                    "Ngày": now.strftime("%d/%m/%Y"),
+                    "Giờ": now.strftime("%H:%M:%S"),
                     "Tên tệp": file_name,
                     "Mô hình": f"{arch_choice.upper()} ({n_mels_choice} bins)",
                     "Dự đoán Top-1": top1_class,
@@ -497,10 +538,19 @@ if active_file_buffer is not None:
             })
 
             fig_bar, ax_bar = plt.subplots(figsize=(6, 3.5))
-            bars = ax_bar.barh(df_top5["Lớp âm thanh"][::-1], df_top5["Xác suất (%)"][::-1], color='#1f77b4')
-            ax_bar.set_xlabel("Xác suất (%)")
-            ax_bar.set_xlim(0, 100)
-            ax_bar.set_title("Top-5 Predicted Classes")
+            labels_rev = df_top5["Lớp âm thanh"][::-1].tolist()
+            scores_rev = df_top5["Xác suất (%)"][::-1].tolist()
+            bar_colors = [BAR_OTHER_COLOR] * (len(scores_rev) - 1) + [BAR_TOP1_COLOR]
+
+            bars = ax_bar.barh(
+                labels_rev,
+                scores_rev,
+                color=bar_colors,
+                edgecolor="#111111" if colorblind_mode else "none",
+                linewidth=1.2 if colorblind_mode else 0
+            )
+            if colorblind_mode and len(bars) > 0:
+                bars[-1].set_hatch("//")
 
             for bar in bars:
                 width = bar.get_width()
@@ -529,7 +579,7 @@ if len(st.session_state.prediction_history) > 0:
         use_container_width=True
     )
 
-    # Hai nút chức năng: Tải báo cáo CSV & Xóa lịch sử
+   # Hai nút chức năng: Tải báo cáo CSV & Xóa lịch sử
     hist_col1, hist_col2, _ = st.columns([1.5, 1.2, 4])
     
     with hist_col1:
@@ -544,11 +594,22 @@ if len(st.session_state.prediction_history) > 0:
 
     with hist_col2:
         if st.button("🗑️ Xóa lịch sử", use_container_width=True):
-            st.session_state.prediction_history = []
-            st.rerun()
-else:
-    st.caption("Chưa có lượt phân loại nào được ghi lại trong phiên này.")
+            st.session_state.confirm_clear_history = True
 
+    # Hộp cảnh báo xác nhận xóa (chỉ hiện khi đã bấm nút Xóa lịch sử)
+    if st.session_state.confirm_clear_history:
+        st.warning("⚠️ **Bạn có chắc chắn muốn xóa toàn bộ lịch sử phân loại không?** Hành động này không thể hoàn tác.")
+        cf_col1, cf_col2, _ = st.columns([1, 1, 5])
+        with cf_col1:
+            if st.button("✅ Có, xóa hết", type="primary", use_container_width=True):
+                st.session_state.prediction_history = []
+                save_history([])
+                st.session_state.confirm_clear_history = False
+                st.rerun()
+        with cf_col2:
+            if st.button("❌ Không", use_container_width=True):
+                st.session_state.confirm_clear_history = False
+                st.rerun()
 
 
 
