@@ -16,7 +16,7 @@ import torch
 import torch.nn.functional as F
 import base64
 import streamlit.components.v1 as components
-
+import wave
 from datetime import datetime
 # -----------------------------------------------------------------------------
 # TODO [THIẾU 1]: CẤU HÌNH THƯ MỤC NGUỒN (PROJECT ROOT)
@@ -29,12 +29,12 @@ if str(PROJECT_ROOT) not in sys.path:
 # TODO [THIẾU 2]: IMPORT CÁC THƯ VIỆN/MODULE NỘI BỘ CỦA NHÓM
 # -----------------------------------------------------------------------------
 try:
-    from src.models import build_model
+    from src.models import build_model  # type: ignore
 except ImportError:
     build_model = None
 
 try:
-    from src.data_lib import wav_to_logmel
+    from src.data_lib import wav_to_logmel  # type: ignore
 except ImportError:
     wav_to_logmel = None
 
@@ -53,10 +53,9 @@ DEFAULT_CONFIDENCE_THRESHOLD = 0.30  # Ngưỡng cảnh báo độ tin cậy th�
 MAX_FILE_SIZE_MB = 10               # Dung lượng tối đa 10 MB
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
-# Đường dẫn tới 2 tấm ảnh cảnh báo
-IMG_INVALID_FORMAT = "app/Assets/Thông báo sai định dạng.png"
-IMG_FILE_TOO_LARGE = "app/Assets/Thông báo vượt giới hạn dung lượng tệp.png"
-SAMPLE_DIR = PROJECT_ROOT / "app" / "Assets" / "samples"
+IMG_INVALID_FORMAT = "DOANCUOIKY/ESC50/app/Assets/Thông báo sai định dạng.png"
+IMG_FILE_TOO_LARGE = "DOANCUOIKY/ESC50/app/Assets/Thông báo vượt giới hạn dung lượng tệp.png"
+SAMPLE_DIR = PROJECT_ROOT / "app"  / "samples"
 HISTORY_FILE = PROJECT_ROOT / "app" / "history.csv"
 
 # CÁC HÀM TIỆN ÍCH & KHỞI TẠO SESSION STATE
@@ -226,7 +225,7 @@ with tab_sample:
             with open(sample_path, "rb") as f:
                 active_file_buffer = io.BytesIO(f.read())
     elif not SAMPLE_DIR.exists() or len(sample_options) == 1:
-        st.caption("💡 *Gợi ý: Đặt các file `.wav` mẫu vào thư mục `app/Assets/samples/` để hiển thị tại đây.*")
+        st.caption("💡 *Gợi ý: Đặt các file `.wav` mẫu vào thư mục `app/samples/` để hiển thị tại đây.*")
 col_left, col_right = st.columns ( [1,1])
 if active_file_buffer is not None:
     file_name = active_file_name
@@ -364,20 +363,56 @@ if active_file_buffer is not None:
                     height=50
                 )
 
-    # BƯỚC 3: TRÌNH PHÁT ÂM THANH VÀ VẼ LOG-MEL SPECTROGRAM
-    # (Chỉ thực hiện nếu file HỢP LỆ)
-    if is_valid_file:
+   # BƯỚC 3: TRÌNH PHÁT ÂM THANH VÀ VẼ LOG-MEL SPECTROGRAM
+    if is_valid_file:         
         with col_left:
             st.markdown("#### 🔊 Trình phát âm thanh")
-            audio_bytes = uploaded_file.read()
+            audio_bytes = active_file_buffer.getvalue()
             st.audio(audio_bytes, format="audio/wav")
 
+            # VẼ BIỂU ĐỒ SÓNG ÂM (WAVEFORM) ---
+            st.markdown("#### 〰️ Biểu đồ Sóng âm (Waveform)")
+            try:
+                with wave.open(io.BytesIO(audio_bytes), "rb") as wf:
+                    n_channels = wf.getnchannels()
+                    sample_width = wf.getsampwidth()
+                    sample_rate = wf.getframerate()
+                    n_frames = wf.getnframes()
+                    raw_frames = wf.readframes(n_frames)
+
+                # Chuyển dữ liệu byte sang mảng biên độ chuẩn hóa [-1.0, 1.0]
+                if sample_width == 2:  # 16-bit PCM (chuẩn của ESC-50)
+                    waveform = np.frombuffer(raw_frames, dtype=np.int16).astype(np.float32) / 32768.0
+                elif sample_width == 1:  # 8-bit unsigned
+                    waveform = (np.frombuffer(raw_frames, dtype=np.uint8).astype(np.float32) - 128.0) / 128.0
+                else:  # 32-bit int
+                    waveform = np.frombuffer(raw_frames, dtype=np.int32).astype(np.float32) / 2147483648.0
+
+                # Nếu là stereo (2 kênh), lấy trung bình về mono giống quy ước C2
+                if n_channels > 1:
+                    waveform = waveform.reshape(-1, n_channels).mean(axis=1)
+
+                time_axis = np.linspace(0, len(waveform) / sample_rate, num=len(waveform))
+
+                fig_wave, ax_wave = plt.subplots(figsize=(6, 2.2))
+                ax_wave.plot(time_axis, waveform, color="#1f77b4", linewidth=0.6)
+                ax_wave.set_title(f"Waveform ({sample_rate} Hz, {len(waveform)/sample_rate:.2f}s)")
+                ax_wave.set_xlabel("Thời gian (giây)")
+                ax_wave.set_ylabel("Biên độ")
+                ax_wave.set_xlim(0, max(time_axis[-1], 0.1))
+                ax_wave.set_ylim(-1.05, 1.05)
+                ax_wave.grid(True, linestyle="--", alpha=0.4)
+                fig_wave.tight_layout()
+                st.pyplot(fig_wave)
+                plt.close(fig_wave)
+            except Exception as e:
+                st.warning(f"Không thể vẽ sóng âm: {e}")
         # TODO [THIẾU 6]: TRÍCH XUẤT PHỔ LOG-MEL THẬT TỪ FILE AUDIO (.wav)
         mel_spec = None
         if wav_to_logmel is not None:
             try:
-                uploaded_file.seek(0)
-                mel_spec = wav_to_logmel(uploaded_file, n_mels=n_mels_choice)
+                active_file_buffer.seek(0)
+                mel_spec = wav_to_logmel(active_file_buffer, n_mels=n_mels_choice)
             except Exception as e:
                 st.warning(f"Không thể xử lý file audio bằng data_lib: {e}. Đang dùng phổ Mel giả lập.")
                 mel_spec = None
