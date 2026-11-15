@@ -1,4 +1,4 @@
-"""tests/test_models_and_train.py - test cho T-01 và T-02 (Tấn).
+"""tests/test_model_cnn_and_train.py - test cho T-01 và T-02 (Tấn).
 
 Gộp trong một file, đều dùng dữ liệu giả và chạy được trên CPU:
 
