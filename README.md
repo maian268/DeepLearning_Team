@@ -2,3 +2,4 @@
 *Nhóm có 4 thành viên: Mai Thị Thúy An, Trần Đoàn Phương Quyên, Nguyễn Thị Phương Thanh, Phan Hữu Tấn.*
 1. Tuần 2_Lab02_Xây dựng và tinh chỉnh mô hình cho dataset https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/code
 2. Tuần 7_Function Approximation + PROPOSAL Đồ án cuối kỳ
+3. Tuần 10_BTL02: Emotion Recognition
