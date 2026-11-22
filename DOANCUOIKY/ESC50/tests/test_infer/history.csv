@@ -1,0 +1,15 @@
+﻿_sig,Ngày,Giờ,Tên tệp,Mô hình,Dự đoán Top-1,Độ tin cậy (%),Trạng thái
+1-155858-B-25.wav_crnn_128_vacuum_cleaner_0.0855,13/11/2026,15:05:53,1-155858-B-25.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp
+1-105224-A-22.wav_crnn_128_vacuum_cleaner_0.0855,13/11/2026,14:51:16,1-105224-A-22.wav,CRNN (128 bins),vacuum_cleaner,8.55,⚠️ Tin cậy thấp
+22/11/2026,11/2026,15:48:25,sample_dog_5s.wav,CRNN-128,128,pouring_water,2.23,720.17
+22/11/2026,11/2026,15:48:25,sample_rain_3s.wav,CRNN-64,64,insects,2.16,105.28
+22/11/2026,11/2026,15:48:26,sample_siren_stereo.wav,CRNN-128,128,frog,2.24,287.99
+22/11/2026,11/2026,15:48:26,sample_clock_16k.wav,CNN-128,128,sneezing,2.12,105.59
+22/11/2026,11/2026,15:52:55,sample_dog_5s.wav,CRNN-128,128,pouring_water,2.23,168.71
+22/11/2026,11/2026,15:52:56,sample_rain_3s.wav,CRNN-64,64,insects,2.16,70.77
+22/11/2026,11/2026,15:52:56,sample_siren_stereo.wav,CRNN-128,128,frog,2.24,164.98
+22/11/2026,11/2026,15:52:56,sample_clock_16k.wav,CNN-128,128,sneezing,2.12,88.35
+22/11/2026,11/2026,15:59:32,sample_dog_5s.wav,CRNN-128,128,pouring_water,2.23,444.75
+22/11/2026,11/2026,15:59:32,sample_rain_3s.wav,CRNN-64,64,insects,2.16,99.84
+22/11/2026,11/2026,15:59:33,sample_siren_stereo.wav,CRNN-128,128,frog,2.24,186.2
+22/11/2026,11/2026,15:59:33,sample_clock_16k.wav,CNN-128,128,sneezing,2.12,252.97
