@@ -1,0 +1,3 @@
+arch: crnn
+n_mels: 128
+specaug: false

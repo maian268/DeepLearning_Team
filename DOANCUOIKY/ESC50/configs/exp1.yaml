@@ -1,0 +1,3 @@
+arch: cnn
+n_mels: 64
+specaug: false
