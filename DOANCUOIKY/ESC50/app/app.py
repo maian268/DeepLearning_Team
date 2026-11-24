@@ -7,36 +7,33 @@ Ghi chú: Các vị trí cần nhóm hoàn thiện/nối code được đánh d�
 
 import sys
 import io
+import os
+import tempfile
+import wave
+import base64
 from pathlib import Path
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import streamlit as st
-import torch
-import torch.nn.functional as F
-import base64
 import streamlit.components.v1 as components
-import wave
-from datetime import datetime
+import torch
 # -----------------------------------------------------------------------------
-# TODO [THIẾU 1]: CẤU HÌNH THƯ MỤC NGUỒN (PROJECT ROOT)
+# 1. Cấu hình đường dẫn dự án và import các module nội bộ
 # -----------------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
-
-# -----------------------------------------------------------------------------
-# TODO [THIẾU 2]: IMPORT CÁC THƯ VIỆN/MODULE NỘI BỘ CỦA NHÓM
-# -----------------------------------------------------------------------------
 try:
-    from src.models import build_model  # type: ignore
+    from src.infer import predict
 except ImportError:
-    build_model = None
-
+    predict = None
 try:
-    from src.data_lib import wav_to_logmel  # type: ignore
+    from src.data_lib import wav_to_logmel
 except ImportError:
-    wav_to_logmel = None
+    wav_to_logmel = None    
 
 # Danh sách 50 lớp âm thanh ESC-50
 ESC50_CLASSES = [
@@ -53,8 +50,8 @@ DEFAULT_CONFIDENCE_THRESHOLD = 0.30  # Ngưỡng cảnh báo độ tin cậy th�
 MAX_FILE_SIZE_MB = 10               # Dung lượng tối đa 10 MB
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
-IMG_INVALID_FORMAT = "DOANCUOIKY/ESC50/app/Assets/Thông báo sai định dạng.png"
-IMG_FILE_TOO_LARGE = "DOANCUOIKY/ESC50/app/Assets/Thông báo vượt giới hạn dung lượng tệp.png"
+IMG_INVALID_FORMAT = PROJECT_ROOT / "app" / "Assets" / "Thông báo sai định dạng.png"
+IMG_FILE_TOO_LARGE = PROJECT_ROOT / "app" / "Assets" / "Thông báo vượt giới hạn dung lượng tệp.png"
 SAMPLE_DIR = PROJECT_ROOT / "app"  / "samples"
 HISTORY_FILE = PROJECT_ROOT / "app" / "history.csv"
 
@@ -158,46 +155,24 @@ threshold_input = st.sidebar.slider(
     help="Nếu xác suất của nhãn dự đoán cao nhất nhỏ hơn ngưỡng này, hệ thống sẽ đưa ra cảnh báo."
 )
 
-# -----------------------------------------------------------------------------
-# TODO [THIẾU 3]: ĐƯỜNG DẪN CHECKPOINT THẬT TỪ THỰC NGHIỆM (EXP1 - EXP5)
-# -----------------------------------------------------------------------------
-checkpoint_path_input = st.sidebar.text_input(
-    "4. Đường dẫn file checkpoint (.pth):",
-    value=f"checkpoints/{arch_choice}_{n_mels_choice}bins_best.pth",
-    help="Cần đường dẫn tới file trọng số .pth thật sau khi huấn luyện xong."
+default_ckpt_name = "exp5_fold1.pt" if arch_choice == "crnn" else (
+    "exp4_fold1.pt" if n_mels_choice == 128 else "exp2_fold1.pt"
 )
 
-@st.cache_resource
-def load_trained_model(arch: str, n_mels: int, ckpt_path: str):
-    """Hàm nạp trọng số mô hình PyTorch đã huấn luyện"""
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    # TODO [THIẾU 4]: KIỂM TRA HÀM BUILD_MODEL REGISTRY
-    if build_model is None:
-        return None, device, "❌ Chưa kết nối được hàm `build_model` từ src/models/__init__.py."
+checkpoint_path_input = st.sidebar.text_input(
+    "4. Đường dẫn file checkpoint (.pt):",
+    value=f"checkpoints/{default_ckpt_name}",
+    help="Định dạng checkpoint của nhóm là .pt (ví dụ: checkpoints/exp5_fold1.pt)."
+)
 
-    path = Path(ckpt_path)
-    # TODO [THIẾU 5]: ĐOẠN XỬ LÝ KHI THIẾU FILE CHECKPOINT (.pth)
-    if not path.exists():
-        return None, device, f"⚠️ Chưa tìm thấy file checkpoint tại: `{ckpt_path}`. Đang chạy chế độ mô phỏng (Dummy mode)."
-
-    try:
-        model = build_model(arch=arch, n_mels=n_mels, n_classes=50)
-        checkpoint = torch.load(path, map_location=device)
-        state_dict = checkpoint.get("state_dict", checkpoint)
-        model.load_state_dict(state_dict)
-        model.to(device)
-        model.eval()
-        return model, device, None
-    except Exception as e:
-        return None, device, f"❌ Lỗi nạp checkpoint: {e}"
-
-model, device, load_status_msg = load_trained_model(arch_choice, n_mels_choice, checkpoint_path_input)
-
-if load_status_msg:
-    st.sidebar.info(load_status_msg)
+ckpt_file_exists = Path(checkpoint_path_input).exists()
+if predict is None:
+    st.sidebar.error("❌ Chưa kết nối được hàm `predict` từ `src/infer.py`.")
+elif not ckpt_file_exists:
+    st.sidebar.info(f"⚠️ Chưa tìm thấy file `{checkpoint_path_input}`. Đang chạy chế độ mô phỏng (Dummy mode).")
 else:
-    st.sidebar.success(f"✅ Đã nạp thành công mô hình `{arch_choice.upper()}` ({n_mels_choice} bins).")
+    st.sidebar.success(f"✅ Sẵn sàng suy luận với checkpoint `{checkpoint_path_input}`.")
+
 
 # BƯỚC 1: CHỌN NGUỒN TỆP ÂM THANH
 st.subheader("1. Chọn nguồn tệp âm thanh (.wav)")
@@ -446,58 +421,73 @@ if active_file_buffer is not None:
                 plt.close(fig_wave)
             except Exception as e:
                 st.warning(f"Không thể vẽ sóng âm: {e}")
-        # TODO [THIẾU 6]: TRÍCH XUẤT PHỔ LOG-MEL THẬT TỪ FILE AUDIO (.wav)
-        mel_spec = None
-        if wav_to_logmel is not None:
-            try:
-                active_file_buffer.seek(0)
-                mel_spec = wav_to_logmel(active_file_buffer, n_mels=n_mels_choice)
-            except Exception as e:
-                st.warning(f"Không thể xử lý file audio bằng data_lib: {e}. Đang dùng phổ Mel giả lập.")
-                mel_spec = None
+            mel_spec = None
+            if wav_to_logmel is not None:
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_mel_wav:
+                    tmp_mel_wav.write(audio_bytes)
+                    tmp_mel_path = tmp_mel_wav.name
+                try:
+                    mel_out = wav_to_logmel(tmp_mel_path, n_mels=n_mels_choice)
+                    if isinstance(mel_out, torch.Tensor):
+                        mel_spec = mel_out.squeeze(0).detach().cpu().numpy()
+                    else:
+                        mel_spec = np.squeeze(np.array(mel_out), axis=0)
+                except Exception as e:
+                    st.warning(f"Không thể xử lý file audio bằng data_lib: {e}. Đang dùng phổ Mel giả lập.")
+                    mel_spec = None
+                finally:
+                    if os.path.exists(tmp_mel_path):
+                        os.remove(tmp_mel_path)
 
-        if mel_spec is None:
-            # TODO [TẠM THỜI]: Dữ liệu giả lập phổ Log-Mel [n_mels, 216]
-            np.random.seed(42)
-            mel_spec = np.random.randn(n_mels_choice, 216)
+            if mel_spec is None:
+                np.random.seed(42)
+                mel_spec = np.random.randn(n_mels_choice, 216)
 
         # Vẽ biểu đồ Log-Mel Spectrogram
-        with col_left:
-            st.markdown("#### 📊 Log-Mel Spectrogram")
-            fig_mel, ax_mel = plt.subplots(figsize=(6, 3.5))
-            cax = ax_mel.imshow(mel_spec, aspect='auto', origin='lower', cmap=MEL_CMAP)
-            fig_mel.colorbar(cax, ax=ax_mel, format="%+2.0f dB")
-            ax_mel.set_title(f"Log-Mel Spectrogram ({n_mels_choice} Mel bins)")
-            ax_mel.set_xlabel("Time Frames")
-            ax_mel.set_ylabel("Mel Frequency Bins")
-            fig_mel.tight_layout()
-            st.pyplot(fig_mel)
-
+            with col_left:
+                # Vẽ biểu đồ Log-Mel Spectrogram
+                st.markdown("#### 📊 Log-Mel Spectrogram")
+                fig_mel, ax_mel = plt.subplots(figsize=(6, 3.5))
+                cax = ax_mel.imshow(mel_spec, aspect='auto', origin='lower', cmap=MEL_CMAP)
+                fig_mel.colorbar(cax, ax=ax_mel, format="%.1f")
+                ax_mel.set_title(f"Log-Mel Spectrogram ({n_mels_choice} Mel bins)")
+                ax_mel.set_xlabel("Time Frames")
+                ax_mel.set_ylabel("Mel Frequency Bins")
+                fig_mel.tight_layout()
+                st.pyplot(fig_mel)
+                plt.close(fig_mel)
         # ---------------------------------------------------------
         # BƯỚC 4: SUY LUẬN VÀ TÍNH XÁC SUẤT TOP-1 (VỚI CẢNH BÁO TÍN CẬY THẤP)
         # ---------------------------------------------------------
         with col_right:
             st.markdown("#### 🤖 Kết quả Phân loại & Dự đoán")
             
-            # TODO [THIẾU 7]: CHẠY DỰ ĐOÁN VỚI MÔ HÌNH THẬT NẾU ĐÃ LOAD ĐƯỢC MODEL
-            if model is not None:
-                mel_tensor = torch.tensor(mel_spec, dtype=torch.float32).unsqueeze(0).unsqueeze(0).to(device)
-                with torch.no_grad():
-                    logits = model(mel_tensor)
-                    probs = F.softmax(logits, dim=-1).squeeze(0).cpu().numpy()
+            if predict is not None and ckpt_file_exists:
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_inf_wav:
+                    tmp_inf_wav.write(audio_bytes)
+                    tmp_inf_path = tmp_inf_wav.name
+                try:
+                    pred_res = predict(tmp_inf_path, checkpoint_path_input)
+                    top1_class, top1_prob = pred_res["top1"]
+                    top5_list = pred_res["top5"]
+                except Exception as e:
+                    st.error(f"❌ Lỗi khi gọi predict(): {e}")
+                    st.stop()
+                finally:
+                    if os.path.exists(tmp_inf_path):
+                        os.remove(tmp_inf_path)
             else:
-                # TODO [TẠM THỜI]: Mảng xác suất giả ngẫu nhiên
+                # Chế độ mô phỏng khi chưa có file checkpoint .pt
                 np.random.seed(len(audio_bytes) % 100)
                 probs = np.random.dirichlet(np.ones(50))
+                top5_indices = np.argsort(probs)[::-1][:5]
+                top5_list = [(f"class_{i:02d}", float(probs[i])) for i in top5_indices]
+                top1_class, top1_prob = top5_list[0]
 
-            top5_indices = np.argsort(probs)[::-1][:5]
-            top1_index = top5_indices[0]
-            top1_class = ESC50_CLASSES[top1_index]
-            top1_prob = probs[top1_index]
-        # Tạo mã định danh duy nhất cho lần chạy này (tên file + cấu hình mô hình)
+            # Tạo mã định danh duy nhất cho lần chạy này (tên file + cấu hình mô hình)
             run_signature = f"{file_name}_{arch_choice}_{n_mels_choice}_{top1_class}_{top1_prob:.4f}"
 
-        # Chỉ lưu nếu bản ghi này chưa nằm ở dòng mới nhất (tránh trùng lặp khi rerun)
+            # Chỉ lưu nếu bản ghi này chưa nằm ở dòng mới nhất (tránh trùng lặp khi rerun)
             if not st.session_state.prediction_history or st.session_state.prediction_history[0]["_sig"] != run_signature:
                 now = datetime.now()
                 st.session_state.prediction_history.insert(0, {
@@ -511,6 +501,7 @@ if active_file_buffer is not None:
                     "Trạng thái": "⚠️ Tin cậy thấp" if top1_prob < threshold_input else "✅ Đạt ngưỡng"
                 })
                 save_history(st.session_state.prediction_history)
+
             st.metric(
                 label="Nhãn dự đoán cao nhất (Top-1):",
                 value=top1_class.upper(),
@@ -611,14 +602,3 @@ if len(st.session_state.prediction_history) > 0:
                 st.session_state.confirm_clear_history = False
                 st.rerun()
 
-
-
-
-# Mã chú ý           Vị trí / Tệp	    Nội dung đang thiếu
-
-# TODO [THIẾU 2]     app/app.py         Hàm wav_to_logmel trong src/data_lib.py
-# TODO [THIẾU 3]     checkpoints/       Các tệp trọng số mô hình thật
-# TODO [THIẾU 4]     src/models/        Đăng ký đầy đủ CNN và CRNN vào build_model trong __init__.py
-# TODO [THIẾU 5]     app/app.py         Xử lý logic cảnh báo khi file checkpoint chưa tồn tại trên đĩa.
-# TODO [THIẾU 6]     app/app.py         Thay thế dữ liệu phổ Mel giả np.random.randn() bằng kết quả từ wav_to_logmel
-# TODO [THIẾU 7]     app/app.py         Thay mảng xác suất giả np.random.dirichlet() bằng kết quả dự đoán từ mô hình thật
