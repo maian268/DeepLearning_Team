@@ -4,3 +4,4 @@
 2. Tuần 7_Function Approximation + PROPOSAL Đồ án cuối kỳ
 3. Tuần 8_PROPOSAL DOANCUOIKY
 4. Tuần 10_BTL02: Emotion Recognition
+5. Tuần 11_BTL03: Chuyển code Keras sang Pytorch
