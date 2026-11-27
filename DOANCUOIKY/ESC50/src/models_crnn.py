@@ -1,22 +1,32 @@
 """
 Mô hình CRNN (Convolutional Recurrent Neural Network) cho phân loại âm thanh ESC-50.
 
-Theo Phần C6 của tài liệu kế hoạch:
-  - 3 khối đầu giống hệt CNN (kênh 32, 64, 128), dùng lại ConvBlock từ models_cnn
-  - thay khối 4 và GAP bằng nhánh hồi quy (Linear -> BiGRU -> trung bình theo thời gian)
-Số tham số: ~1,06 triệu với 128 bins (1.056.594), ~0,93 triệu với 64 bins (925.522).
 """
 
+from typing import Tuple
 import torch
 import torch.nn as nn
 
-# Dùng chung ConvBlock và count_params với CNN để hai mô hình thống nhất.
-# Thử import theo package (src.models_crnn) trước, rồi mới import cùng thư mục.
-try:
-    from .models_cnn import ConvBlock, count_params  # noqa: F401
-except ImportError:
-    from models_cnn import ConvBlock, count_params  # noqa: F401
 
+class ConvBlock(nn.Module):
+    """
+    Khối tích chập kép:
+    [Conv2d (3x3) -> BatchNorm2d -> ReLU] x 2 -> MaxPool2d (2x2)
+    """
+    def __init__(self, in_channels: int, out_channels: int):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False),  # 0
+            nn.BatchNorm2d(out_channels),                                                          # 1
+            nn.ReLU(inplace=True),                                                                 # 2
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False), # 3
+            nn.BatchNorm2d(out_channels),                                                          # 4
+            nn.ReLU(inplace=True),                                                                 # 5
+            nn.MaxPool2d(kernel_size=2, stride=2)                                                  # 6
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net(x)
 
 class CRNN(nn.Module):
     """
@@ -30,17 +40,18 @@ class CRNN(nn.Module):
     def __init__(
         self,
         n_mels: int = 128,
-        n_classes: int = 50,
-        dropout: float = 0.3,   # cùng tên tham số với CNN (và khóa "dropout" trong CFG)
+        n_classes: int = 50, 
+        dropout_rate: float = 0.3,
+        **kwargs
     ):
         super().__init__()
         self.n_mels = n_mels
         self.n_classes = n_classes
 
-        # 1. 3 khối tích chập CNN trích xuất không gian - tần số
-        self.cnn_block1 = ConvBlock(1, 32)
-        self.cnn_block2 = ConvBlock(32, 64)
-        self.cnn_block3 = ConvBlock(64, 128)
+        # 1. 3 Khối tích chập CNN trích xuất không gian - tần số
+        self.cnn_block1 = ConvBlock(in_channels=1, out_channels=32)
+        self.cnn_block2 = ConvBlock(in_channels=32, out_channels=64)
+        self.cnn_block3 = ConvBlock(in_channels=64, out_channels=128)
 
         # Trục tần số n_mels bị giảm 8 lần qua 3 tầng MaxPool(2)
         reduced_freq_bins = n_mels // 8
@@ -50,7 +61,7 @@ class CRNN(nn.Module):
         self.proj = nn.Sequential(
             nn.Linear(in_features_proj, 128),
             nn.ReLU(inplace=True),
-            nn.Dropout(dropout),
+            nn.Dropout(dropout_rate)
         )
 
         # 3. BiGRU học phụ thuộc ngữ cảnh chuỗi theo trục thời gian
@@ -60,19 +71,19 @@ class CRNN(nn.Module):
             num_layers=2,
             batch_first=True,
             bidirectional=True,
-            dropout=dropout,
+            dropout=dropout_rate
         )
 
         # 4. Tầng phân loại đầu ra
         self.classifier = nn.Sequential(
-            nn.Dropout(dropout),
-            nn.Linear(256, n_classes),  # 256 = 128 * 2 do Bidirectional
+            nn.Dropout(dropout_rate),
+            nn.Linear(256, n_classes)  # 256 = 128 * 2 do Bidirectional
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Input: [B, 1, n_mels, 216]
-        Output: [B, n_classes]  (logit, chưa softmax)
+        Output: [B, n_classes]
         """
         # --- 1. CNN Feature Extraction ---
         x = self.cnn_block1(x)  # -> [B, 32, n_mels/2, 108]
@@ -95,4 +106,52 @@ class CRNN(nn.Module):
         pooled = gru_out.mean(dim=1)  # -> [B, 256]
 
         # --- 6. Classification Logits ---
-        return self.classifier(pooled)  # -> [B, 50]
+        logits = self.classifier(pooled)  # -> [B, 50]
+        return logits
+
+
+def count_parameters(model: nn.Module) -> Tuple[int, int]:
+    """Trả về (tổng số tham số, số tham số cần train)."""
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return total_params, trainable_params
+
+
+if __name__ == "__main__":
+    print("=" * 60)
+    print("KIỂM THỬ MÔ HÌNH CRNN TRÊN DỮ LIỆU GIẢ (SMOKE TEST H-01)")
+    print("=" * 60)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Đang chạy kiểm thử trên: {device}\n")
+
+    batch_size = 4
+    time_steps = 216
+
+    # Test cấu hình n_mels = 64
+    print("[1] Kiểm tra với n_mels = 64:")
+    model_64 = CRNN(n_mels=64, n_classes=50).to(device)
+    dummy_input_64 = torch.randn(batch_size, 1, 64, time_steps).to(device)
+    out_64 = model_64(dummy_input_64)
+    total_64, train_64 = count_parameters(model_64)
+    print(f"  + Input shape:  {list(dummy_input_64.shape)}")
+    print(f"  + Output shape: {list(out_64.shape)}")
+    print(f"  + Số tham số:   {train_64:,} tham số")
+    assert out_64.shape == (batch_size, 50), f"Lỗi shape: {out_64.shape}"
+    print("  -> Đạt yêu cầu cho 64 bins!\n")
+
+    # Test cấu hình n_mels = 128 (Cấu hình chính cho EXP5)
+    print("[2] Kiểm tra với n_mels = 128:")
+    model_128 = CRNN(n_mels=128, n_classes=50).to(device)
+    dummy_input_128 = torch.randn(batch_size, 1, 128, time_steps).to(device)
+    out_128 = model_128(dummy_input_128)
+    total_128, train_128 = count_parameters(model_128)
+    print(f"  + Input shape:  {list(dummy_input_128.shape)}")
+    print(f"  + Output shape: {list(out_128.shape)}")
+    print(f"  + Số tham số:   {train_128:,} tham số (~1.06 triệu)")
+    assert out_128.shape == (batch_size, 50), f"Lỗi shape: {out_128.shape}"
+    print("  -> Đạt yêu cầu cho 128 bins!\n")
+
+    print("=" * 60)
+    print("TẤT CẢ KIỂM THỬ THÀNH CÔNG! SẴN SÀNG MERGE VÀO REGISTRY.")
+    print("=" * 60)
