@@ -40,10 +40,11 @@ ESC50_CLASSES = [
     "dog", "rooster", "pig", "cow", "frog", "cat", "hen", "insects", "sheep", "crow",
     "rain", "sea_waves", "crackling_fire", "crickets", "chirping_birds", "water_drops",
     "wind", "pouring_water", "toilet_flush", "thunderstorm", "crying_baby", "sneezing",
-    "clapping", "coughing", "footsteps", "laughing", "tooting_synth", "snoring", "drinking_sipping",
-    "door_wood_knock", "mouse_click", "keyboard_typing", "door_wood_creak", "can_opening",
-    "washing_machine", "vacuum_cleaner", "clock_ticking", "glass_breaking", "helicopter",
-    "chainsaw", "siren", "car_horn", "engine", "train", "church_bells", "airplane", "fireworks", "hand_saw"
+    "clapping", "breathing", "coughing", "footsteps", "laughing", "brushing_teeth",
+    "snoring", "drinking_sipping", "door_wood_knock", "mouse_click", "keyboard_typing",
+    "door_wood_creak", "can_opening", "washing_machine", "vacuum_cleaner", "clock_ticking",
+    "glass_breaking", "helicopter", "chainsaw", "siren", "car_horn", "engine", "train",
+    "church_bells", "airplane", "fireworks", "hand_saw"
 ]
 
 DEFAULT_CONFIDENCE_THRESHOLD = 0.30  # Ngưỡng cảnh báo độ tin cậy thấp (30%)
@@ -155,46 +156,78 @@ threshold_input = st.sidebar.slider(
     help="Nếu xác suất của nhãn dự đoán cao nhất nhỏ hơn ngưỡng này, hệ thống sẽ đưa ra cảnh báo."
 )
 
+DEFAULT_CKPT_DIR = PROJECT_ROOT / "checkpoints"
+DEFAULT_CKPT_DIR.mkdir(parents=True, exist_ok=True)
+
 default_ckpt_name = "exp5_fold1.pt" if arch_choice == "crnn" else (
     "exp4_fold1.pt" if n_mels_choice == 128 else "exp2_fold1.pt"
 )
 
 checkpoint_path_input = st.sidebar.text_input(
     "4. Đường dẫn file checkpoint (.pt):",
-    value=f"checkpoints/{default_ckpt_name}",
+    value=str(DEFAULT_CKPT_DIR / default_ckpt_name),
     help="Định dạng checkpoint của nhóm là .pt (ví dụ: checkpoints/exp5_fold1.pt)."
 )
 
-ckpt_file_exists = Path(checkpoint_path_input).exists()
+# Chuẩn hóa đường dẫn: hỗ trợ cả đường dẫn tuyệt đối lẫn tương đối theo PROJECT_ROOT
+raw_ckpt_path = Path(checkpoint_path_input.strip().strip('"').strip("'"))
+resolved_ckpt_path = raw_ckpt_path if raw_ckpt_path.is_absolute() else (PROJECT_ROOT / raw_ckpt_path)
+# Tự động đồng bộ thông số hiển thị nếu tên file là exp1..exp6
+ckpt_stem = resolved_ckpt_path.stem.lower()
+EXP_META = {
+    "exp1": ("cnn", 64),
+    "exp2": ("cnn", 64),
+    "exp3": ("cnn", 128),
+    "exp4": ("cnn", 128),
+    "exp5": ("crnn", 128),
+    "exp6": ("crnn", 128),
+}
+for exp_prefix, (detected_arch, detected_mels) in EXP_META.items():
+    if ckpt_stem.startswith(exp_prefix):
+        if arch_choice != detected_arch or n_mels_choice != detected_mels:
+            st.sidebar.caption(
+                f"ℹ️ File `{resolved_ckpt_path.name}` thuộc cấu hình **{detected_arch.upper()} ({detected_mels} bins)**."
+            )
+        arch_choice = detected_arch
+        n_mels_choice = detected_mels
+        break
+ckpt_file_exists = resolved_ckpt_path.is_file()
 if predict is None:
     st.sidebar.error("❌ Chưa kết nối được hàm `predict` từ `src/infer.py`.")
 elif not ckpt_file_exists:
-    st.sidebar.info(f"⚠️ Chưa tìm thấy file `{checkpoint_path_input}`. Đang chạy chế độ mô phỏng (Dummy mode).")
+    st.sidebar.warning(
+        f"⚠️ Chưa tìm thấy file `{resolved_ckpt_path.name}` tại `{resolved_ckpt_path.parent}`.\n\n"
+        f"Hãy chép file `.pt` từ Google Drive vào thư mục `ESC50/checkpoints/` (hiện đang chạy Dummy mode)."
+    )
 else:
-    st.sidebar.success(f"✅ Sẵn sàng suy luận với checkpoint `{checkpoint_path_input}`.")
+    st.sidebar.success(f"✅ Sẵn sàng suy luận với checkpoint `{resolved_ckpt_path.name}`.")
 
 
-# BƯỚC 1: CHỌN NGUỒN TỆP ÂM THANH
+# BƯỚC 1: CHỌN NGUỒN TỆP ÂM THANH (.wav)
 st.subheader("1. Chọn nguồn tệp âm thanh (.wav)")
 
-tab_upload, tab_sample = st.tabs([
-    "📤 Tải tệp lên từ máy tính",
-    "📁 Chọn từ tệp mẫu cố định"
-])
+input_mode = st.radio(
+    "Chọn phương thức nhập âm thanh:",
+    options=[
+        "📤 Tải tệp lên từ máy tính",
+        "📁 Chọn từ tệp mẫu cố định",
+        "🎙️ Ghi âm trực tiếp từ Micro"
+    ],
+    horizontal=True
+)
 
 active_file_name = None
 active_file_size = 0
 active_file_buffer = None
 
 # --- MỤC 1: TẢI LÊN TỪ TRÊN MÁY ---
-with tab_upload:
+if input_mode == "📤 Tải tệp lên từ máy tính":
     uploaded_file = st.file_uploader(
         "Vui lòng chọn 1 file WAV âm thanh 5 giây (Chỉ hỗ trợ định dạng .wav, tối đa 10MB):",
         type=None,
         key=f"audio_uploader_{st.session_state.uploader_key}"
     )
 
-    # JS giữ cố định bộ lọc .wav mặc định trên hộp thoại Windows
     components.html(
         """
         <script>
@@ -221,7 +254,7 @@ with tab_upload:
         active_file_buffer = io.BytesIO(uploaded_file.getvalue())
 
 # --- MỤC 2: CHỌN TỪ TỆP MẪU CỐ ĐỊNH ---
-with tab_sample:
+elif input_mode == "📁 Chọn từ tệp mẫu cố định":
     sample_options = ["-- Chọn một tệp âm thanh mẫu để thử nghiệm --"]
     if SAMPLE_DIR.exists():
         sample_options += sorted([f.name for f in SAMPLE_DIR.glob("*.wav")])
@@ -240,11 +273,26 @@ with tab_sample:
                 active_file_buffer = io.BytesIO(f.read())
     elif not SAMPLE_DIR.exists() or len(sample_options) == 1:
         st.caption("💡 *Gợi ý: Đặt các file `.wav` mẫu vào thư mục `app/samples/` để hiển thị tại đây.*")
-col_left, col_right = st.columns ( [1,1])
+
+# --- NGUỒN 3: GHI ÂM TRỰC TIẾP TỪ MICRO ---
+elif input_mode == "🎙️ Ghi âm trực tiếp từ Micro":
+    st.caption("💡 *Nhấn biểu tượng micro bên dưới để bắt đầu ghi âm (nên ghi khoảng 3–5 giây), sau đó nhấn dừng để hệ thống tự động nhận diện.*")
+    recorded_audio = st.audio_input("Thu âm trực tiếp:")
+
+    if recorded_audio is not None:
+        raw_rec_bytes = recorded_audio.getvalue()
+        active_file_name = f"mic_record_{datetime.now().strftime('%H%M%S')}.wav"
+        active_file_size = len(raw_rec_bytes)
+        active_file_buffer = io.BytesIO(raw_rec_bytes)
+
+# Sát lề trái (0 dấu cách) - luôn được chạy bất kể bạn chọn tab/radio nào
+col_left, col_right = st.columns([1, 1])
+
 if active_file_buffer is not None:
     file_name = active_file_name
     file_size = active_file_size
-    file_id = f"{ file_name}_{file_size}"
+    file_id = f"{file_name}_{file_size}"
+
     # ---------------------------------------------------------
     # BƯỚC 2: KIỂM TRA LỖI (QUÁ DUNG LƯỢNG / SAI ĐỊNH DẠNG)
     # ---------------------------------------------------------
@@ -467,7 +515,7 @@ if active_file_buffer is not None:
                     tmp_inf_wav.write(audio_bytes)
                     tmp_inf_path = tmp_inf_wav.name
                 try:
-                    pred_res = predict(tmp_inf_path, checkpoint_path_input)
+                    pred_res = predict(tmp_inf_path, str(resolved_ckpt_path))
                     top1_class, top1_prob = pred_res["top1"]
                     top5_list = pred_res["top5"]
                 except Exception as e:
@@ -477,13 +525,12 @@ if active_file_buffer is not None:
                     if os.path.exists(tmp_inf_path):
                         os.remove(tmp_inf_path)
             else:
-                # Chế độ mô phỏng khi chưa có file checkpoint .pt
                 np.random.seed(len(audio_bytes) % 100)
-                probs = np.random.dirichlet(np.ones(50))
+                probs = np.random.dirichlet(np.ones(len(ESC50_CLASSES)))
                 top5_indices = np.argsort(probs)[::-1][:5]
-                top5_list = [(f"class_{i:02d}", float(probs[i])) for i in top5_indices]
+                top5_list = [(ESC50_CLASSES[i], float(probs[i])) for i in top5_indices]
                 top1_class, top1_prob = top5_list[0]
-
+            
             # Tạo mã định danh duy nhất cho lần chạy này (tên file + cấu hình mô hình)
             run_signature = f"{file_name}_{arch_choice}_{n_mels_choice}_{top1_class}_{top1_prob:.4f}"
 
@@ -520,8 +567,8 @@ if active_file_buffer is not None:
             # BƯỚC 5: BIỂU ĐỒ CỘT TOP-5 XÁC SUẤT VÀ BẢNG SỐ LIỆU
             # ---------------------------------------------------------
             st.markdown("##### 🏆 Biểu đồ Top-5 Xác suất cao nhất")
-            top5_classes = [ESC50_CLASSES[i] for i in top5_indices]
-            top5_scores = [probs[i] * 100 for i in top5_indices]
+            top5_classes = [item[0] for item in top5_list]
+            top5_scores = [item[1] * 100 for item in top5_list]
 
             df_top5 = pd.DataFrame({
                 "Lớp âm thanh": top5_classes,
