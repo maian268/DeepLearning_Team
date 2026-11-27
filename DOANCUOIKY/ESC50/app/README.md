@@ -1,79 +1,51 @@
-# ESC-50 Audio Classification Web App
+# 🎵 ESC-50 Audio Classification Web App
 
-Ứng dụng Web tương tác được xây dựng bằng  Streamlit , cho phép người dùng tải lên hoặc chọn các tệp âm thanh môi trường (định dạng `.wav`, thời lượng 5 giây) để dự đoán và phân loại thuộc  50 lớp âm thanh ESC-50  sử dụng các mô hình học sâu  CNN Baseline  và  CRNN (Convolutional Recurrent Neural Network) .
+Ứng dụng web tương tác xây dựng bằng **Streamlit** phục vụ bài toán phân loại **50 lớp âm thanh môi trường (ESC-50)** sử dụng các mô hình học sâu **CNN** và **CRNN**.
+
+
+## ✨ Tính năng chính
+
+1. **Đa dạng nguồn nhập âm thanh (`.wav`)**
+   - **Tải tệp từ máy tính:** Hỗ trợ tệp định dạng `.wav` (khuyến nghị 5 giây, dung lượng tối đa **10 MB**).
+   - **Chọn tệp mẫu cố định:** Danh sách các tệp âm thanh `.wav` có sẵn trong thư mục `app/samples/` để kiểm thử nhanh.
+   - **Ghi âm trực tiếp từ Micro:** Thu âm trực tiếp trên trình duyệt và tự động nhận diện ngay sau khi dừng ghi.
+
+2. **Kiểm tra dữ liệu đầu vào & Cảnh báo trực quan**
+   - Tự động kiểm tra định dạng tệp (`.wav`) và giới hạn dung lượng (`<= 10 MB`).
+   - Hiển thị thông báo cảnh báo bằng hình ảnh tương tác (cho phép bấm đóng hoặc chọn lại tệp trực tiếp) khi phát hiện tệp không hợp lệ.
+
+3. **Cấu hình mô hình linh hoạt (Sidebar)**
+   - **Kiến trúc mô hình (`arch`):** Chuyển đổi giữa **CRNN** (*Convolutional Recurrent Neural Network*) và **CNN Baseline**.
+   - **Số dải tần Mel (`n_mels`):** Hỗ trợ **128** hoặc **64** Mel bins.
+   - **Tự động đồng bộ cấu hình từ Checkpoint:** Khi nhập đường dẫn tệp trọng số theo quy ước thí nghiệm (`exp1`–`exp6`), ứng dụng tự động nhận diện kiến trúc (`cnn`/`crnn`) và số dải Mel (`64`/`128`) tương ứng.
+   - **Ngưỡng cảnh báo tin cậy:** Thanh trượt điều chỉnh ngưỡng từ `10%` đến `80%` (mặc định `30%`); đưa ra cảnh báo nếu xác suất Top-1 thấp hơn ngưỡng.
+   - **Chế độ hỗ trợ người mù màu (Colorblind Mode):** Chuyển đổi bảng màu biểu đồ sang chuẩn khoa học **Cividis / Okabe-Ito** độ tương phản cao kèm họa tiết phân biệt cột Top-1.
+
+4. **Trực quan hóa tín hiệu & Kết quả suy luận**
+   - Trình phát âm thanh trực tiếp trên giao diện.
+   - Biểu đồ **Sóng âm (Waveform)** theo thời gian thực (tự động chuyển stereo về mono).
+   - Biểu đồ **Log-Mel Spectrogram** tương ứng với số dải Mel đã chọn.
+   - Hiển thị nhãn dự đoán **Top-1**, biểu đồ cột ngang và bảng xác suất chi tiết **Top-5**.
+
+5. **Lưu trữ & Xuất lịch sử phân loại**
+   - Tự động lưu lịch sử các lần dự đoán vào tệp `app/history.csv` (duy trì dữ liệu qua các phiên làm việc và chống ghi trùng khi tải lại trang).
+   - Hỗ trợ tải xuống báo cáo lịch sử định dạng `.CSV` (mã hóa `UTF-8-SIG` tương thích tốt với Excel) hoặc xóa toàn bộ lịch sử có hộp thoại xác nhận.
 
 ---
 
-## Cấu trúc Thư mục Ứng dụng
+## 📁 Cấu trúc thư mục `app/`
 
 ```text
 ESC50/
 ├── app/
-│   ├── app.py              # Mã nguồn chính của giao diện Web Streamlit (H-04)
-│   ├── README.md           # Tệp tài liệu hướng dẫn sử dụng (tệp này)
-│   ├── history.csv         # Lịch sử phân loại (tự động tạo khi ứng dụng thực thi)
-│   ├── Assets/             # Thư mục chứa các ảnh thông báo lỗi giao diện
+│   ├── Assets/
 │   │   ├── Thông báo sai định dạng.png
 │   │   └── Thông báo vượt giới hạn dung lượng tệp.png
-│   └── samples/            # Thư mục chứa các tệp âm thanh WAV mẫu để dùng thử
-│       ├── 1-100032-A-0.wav
-│       ├── 1-100038-A-14.wav
-│       └── ...
-```
-
----
-
-## Yêu cầu Môi trường & Cài đặt
-
-Đảm bảo bạn đã cài đặt các thư viện cần thiết trong môi trường Virtualenv hoặc Conda của dự án:
-
-```bash
-pip install streamlit torch numpy pandas matplotlib
-```
-
----
-
-## Hướng dẫn Khởi chạy Ứng dụng
-
- Mở Terminal (PowerShell / Command Prompt / Bash) tại  thư mục gốc của dự án (`ESC50/`)  và thực hiện lệnh:
-
-```bash
-streamlit run app/app.py
-```
-Sau khi chạy lệnh, giao diện ứng dụng sẽ tự động mở trên trình duyệt mặc định tại đường dẫn `http://localhost:8501`.
----
-
-## Các Tính năng Chính & Cấu hình Giao diện
-
-### 1. Cấu hình Mô hình (Sidebar - Thanh điều hướng bên trái)
-*  Kiến trúc mô hình (`arch`):  Cho phép lựa chọn giữa  CRNN  (Convolutional Recurrent Neural Network) và  CNN Baseline .
-*  Số dải tần Mel (`n_mels`):  Tùy chọn `128` bins hoặc `64` bins.
-*  Ngưỡng cảnh báo tin cậy (Low Confidence Threshold):  Con trượt chọn ngưỡng từ `0.10` đến `0.80` (Mặc định:  `0.30`  hay  30% ).
-  * *Chức năng:* Nếu nhãn dự đoán Top-1 có xác suất nhỏ hơn ngưỡng này, hệ thống sẽ đưa ra cảnh báo màu vàng về độ tin cậy thấp (âm thanh bị nhiễu hoặc không điển hình).
-*  Đường dẫn Checkpoint (`.pt`):  Nhập đường dẫn tệp trọng số (mặc định: `checkpoints/exp5_fold1.pt`).
-  * *Chế độ mô phỏng (Dummy Mode):* Nếu tệp `.pt` chưa tồn tại trong thư mục `checkpoints/`, ứng dụng tự động hiển thị thông báo màu vàng và chạy ở chế độ mô phỏng để tránh lỗi crash ứng dụng.
-
-### 2. Chế độ Hỗ trợ Người Mù màu (Colorblind Accessibility Mode)
-* Công tắc bật/tắt ở Sidebar giúp chuyển đổi bảng màu hiển thị sang chuẩn  Cividis / Okabe-Ito :
-  * Chuyển phổ Log-Mel Spectrogram sang bảng màu khoa học `cividis`.
-  * Chuyển biểu đồ sóng âm (Waveform) và cột xác suất Top-1 sang tông màu Cam đất / Cam vàng tương phản cao.
-  * Thêm họa tiết sọc chéo (hatching `//`) cho cột Top-1 giúp phân biệt dễ dàng.
-
-### 3. Nhập dữ liệu Âm thanh (Audio Input Tools)
-*  Tải tệp từ máy tính:  Chọn file `.wav` dung lượng tối đa  10 MB .
-  * Hệ thống tự động kiểm tra lỗi định dạng và dung lượng tệp. Nếu vi phạm, giao diện hiển thị ảnh thông báo trực quan kèm nút tương tác tải lại tệp.
-*  Tệp âm thanh mẫu (Samples):  Chọn trực tiếp các mẫu âm thanh có sẵn từ thư mục `app/samples/`.
-
-### 4. Trực quan hóa Dữ liệu Âm thanh (Audio Visualization)
-*  Audio Player:  Trình phát nghe lại âm thanh trực tiếp trên web.
-*  Biểu đồ Sóng âm (Waveform):  Hiển thị biên độ âm thanh theo thời gian chuẩn hóa.
-*  Biểu đồ Phổ Log-Mel (Log-Mel Spectrogram):  Biến đổi tín hiệu âm thanh dạng sóng thành dạng phổ tần số Mel trực quan.
-
-### 5. Kết quả Dự đoán & Lịch sử Phân loại
-*  Dự đoán Top-1:  Hiển thị tên nhãn phân loại âm thanh có xác suất cao nhất kèm chỉ số % độ tin cậy.
-*  Biểu đồ Top-5:  Biểu đồ cột nằm ngang thể hiện Top-5 nhãn có xác suất cao nhất.
-*  Lịch sử Phân loại (History Log):  Bảng ghi nhận tất cả các lượt phân loại trong phiên làm việc.
-  * Hỗ trợ xuất dữ liệu ra tệp  CSV (`esc50_history_*.csv`) .
-  * Hỗ trợ nút xóa toàn bộ lịch sử kèm hộp thoại xác nhận an toàn.
-
----
+│   ├── samples/                # Thư mục chứa các tệp .wav mẫu để thử nghiệm
+│   ├── app.py                  # Mã nguồn chính của ứng dụng Streamlit
+│   ├── history.csv             # Tệp lưu lịch sử phân loại (tự động tạo khi chạy)
+│   └── README.md               # Tài liệu hướng dẫn sử dụng
+├── checkpoints/                # Thư mục chứa các tệp trọng số mô hình (.pt)
+└── src/
+    ├── data_lib.py             # Hàm tiền xử lý wav_to_logmel
+    └── infer.py                # Hàm suy luận predict()
