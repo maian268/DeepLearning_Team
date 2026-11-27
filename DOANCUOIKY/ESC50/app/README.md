@@ -49,3 +49,36 @@ ESC50/
 └── src/
     ├── data_lib.py             # Hàm tiền xử lý wav_to_logmel
     └── infer.py                # Hàm suy luận predict()
+```
+🚀 Hướng dẫn cài đặt & Chạy ứng dụng
+1. Chuẩn bị môi trường
+Đảm bảo đã cài đặt Python (>= 3.9) và các thư viện cần thiết từ thư mục gốc DOANCUOIKY/ESC50:
+
+Bash
+pip install streamlit torch torchaudio numpy pandas matplotlib soundfile
+2. Chuẩn bị trọng số mô hình (Checkpoint)
+Do dung lượng lớn, các tệp trọng số huấn luyện được lưu trữ trên Google Drive chung của nhóm (thư mục checkpoints/). Tải các tệp .pt về và đặt đúng vào thư mục DOANCUOIKY/ESC50/checkpoints/, ví dụ:
+
+checkpoints/exp5_fold1.pt (CRNN, 128 Mel bins — mặc định)
+
+checkpoints/exp4_fold1.pt (CNN, 128 Mel bins)
+
+checkpoints/exp2_fold1.pt (CNN, 64 Mel bins)
+
+Lưu ý: Nếu chưa có tệp .pt trong thư mục checkpoints/, ứng dụng sẽ tự động chuyển sang chế độ chạy thử giao diện (Dummy mode) để kiểm tra luồng hiển thị.
+
+3. Khởi chạy Streamlit
+Mở Terminal tại thư mục DOANCUOIKY/ESC50 và chạy lệnh:
+
+Bash
+streamlit run app/app.py
+Sau khi khởi chạy thành công, truy cập địa chỉ hiển thị trên terminal (thường là http://localhost:8501) để sử dụng ứng dụng.
+
+🖼️ Minh họa giao diện hoạt động
+
+<img width="1343" height="1417" alt="image" src="https://github.com/user-attachments/assets/6e018d32-a6ce-40d8-9538-fcd040de80fd" />
+
+
+📜 Lưu ý bản quyền dữ liệu (CC BY-NC)Bộ dữ liệu ESC-50 (Environmental Sound Classification, Piczak 2015) được phát hành theo giấy phép Creative Commons Attribution-NonCommercial 3.0 / 4.0 (CC BY-NC).
+
+Toàn bộ mã nguồn, trọng số mô hình (.pt) và các tệp âm thanh mẫu trong app/samples/ chỉ phục vụ mục đích học tập, nghiên cứu khoa học và minh họa đồ án, nghiêm cấm mọi hành vi sử dụng cho mục đích thương mại.
