@@ -1,3 +1,28 @@
 ﻿_sig,Ngày,Giờ,Tên tệp,Mô hình,Dự đoán Top-1,Độ tin cậy (%),Trạng thái
+1-11687-A-47.wav_crnn_128_airplane_0.3956,27/11/2026,21:18:08,1-11687-A-47.wav,CRNN (128 bins),airplane,39.56,✅ Đạt ngưỡng
+1-11687-A-47.wav_cnn_128_vacuum_cleaner_0.3674,27/11/2026,21:17:45,1-11687-A-47.wav,CNN (128 bins),vacuum_cleaner,36.74,✅ Đạt ngưỡng
+1-11687-A-47.wav_crnn_128_airplane_0.3956,27/11/2026,21:17:22,1-11687-A-47.wav,CRNN (128 bins),airplane,39.56,✅ Đạt ngưỡng
+1-105224-A-22.wav_crnn_128_clapping_0.9988,27/11/2026,20:56:12,1-105224-A-22.wav,CRNN (128 bins),clapping,99.88,✅ Đạt ngưỡng
+1-105224-A-22.wav_cnn_128_clapping_0.9982,27/11/2026,20:55:57,1-105224-A-22.wav,CNN (128 bins),clapping,99.82,✅ Đạt ngưỡng
+1-7973-A-7.wav_cnn_128_insects_0.9909,27/11/2026,20:55:49,1-7973-A-7.wav,CNN (128 bins),insects,99.09,✅ Đạt ngưỡng
+1-7974-A-49.wav_cnn_128_hand_saw_0.9437,27/11/2026,20:55:09,1-7974-A-49.wav,CNN (128 bins),hand_saw,94.37,✅ Đạt ngưỡng
+1-7974-A-49.wav_crnn_128_pig_0.7855,27/11/2026,20:54:52,1-7974-A-49.wav,CRNN (128 bins),pig,78.55,✅ Đạt ngưỡng
+1-7973-A-7.wav_crnn_128_insects_0.6112,27/11/2026,20:54:19,1-7973-A-7.wav,CRNN (128 bins),insects,61.12,✅ Đạt ngưỡng
+1-7973-A-7.wav_cnn_128_insects_0.9909,27/11/2026,20:53:56,1-7973-A-7.wav,CNN (128 bins),insects,99.09,✅ Đạt ngưỡng
+1-9887-A-49.wav_cnn_128_laughing_0.2945,27/11/2026,20:53:39,1-9887-A-49.wav,CNN (128 bins),laughing,29.45,⚠️ Tin cậy thấp
+1-9887-A-49.wav_crnn_128_crying_baby_0.4220,27/11/2026,20:53:16,1-9887-A-49.wav,CRNN (128 bins),crying_baby,42.2,✅ Đạt ngưỡng
+1-9887-A-49.wav_cnn_128_laughing_0.2945,27/11/2026,20:53:07,1-9887-A-49.wav,CNN (128 bins),laughing,29.45,⚠️ Tin cậy thấp
+1-100032-A-0.wav_cnn_128_dog_0.6706,27/11/2026,20:52:52,1-100032-A-0.wav,CNN (128 bins),dog,67.06,✅ Đạt ngưỡng
+1-100038-A-14.wav_cnn_128_laughing_0.9300,27/11/2026,20:50:22,1-100038-A-14.wav,CNN (128 bins),laughing,93.0,✅ Đạt ngưỡng
+1-100032-A-0.wav_cnn_128_dog_0.6706,27/11/2026,20:50:07,1-100032-A-0.wav,CNN (128 bins),dog,67.06,✅ Đạt ngưỡng
+1-100032-A-0.wav_crnn_128_dog_0.5301,27/11/2026,20:49:59,1-100032-A-0.wav,CRNN (128 bins),dog,53.01,✅ Đạt ngưỡng
+1-100038-A-14.wav_crnn_128_chirping_birds_0.7401,27/11/2026,20:49:49,1-100038-A-14.wav,CRNN (128 bins),chirping_birds,74.01,✅ Đạt ngưỡng
+1-100038-A-14.wav_cnn_128_laughing_0.9300,27/11/2026,20:48:58,1-100038-A-14.wav,CNN (128 bins),laughing,93.0,✅ Đạt ngưỡng
+1-100038-A-14.wav_crnn_128_chirping_birds_0.7401,27/11/2026,20:48:35,1-100038-A-14.wav,CRNN (128 bins),chirping_birds,74.01,✅ Đạt ngưỡng
+1-155858-B-25.wav_crnn_128_footsteps_0.5152,27/11/2026,20:46:21,1-155858-B-25.wav,CRNN (128 bins),footsteps,51.52,✅ Đạt ngưỡng
+1-155858-B-25.wav_cnn_128_fireworks_0.7113,27/11/2026,19:58:25,1-155858-B-25.wav,CNN (128 bins),fireworks,71.13,✅ Đạt ngưỡng
+1-100038-A-14.wav_cnn_128_laughing_0.9300,27/11/2026,19:57:03,1-100038-A-14.wav,CNN (128 bins),laughing,93.0,✅ Đạt ngưỡng
+1-105224-A-22.wav_crnn_128_vacuum_cleaner_0.0891,27/11/2026,09:00:32,1-105224-A-22.wav,CRNN (128 bins),vacuum_cleaner,8.91,⚠️ Tin cậy thấp
+1-105224-A-22.wav_crnn_128_class_35_0.0855,27/11/2026,08:54:43,1-105224-A-22.wav,CRNN (128 bins),class_35,8.55,⚠️ Tin cậy thấp
 1-155858-B-25.wav_cnn_128_class_35_0.0855,24/11/2026,19:02:50,1-155858-B-25.wav,CNN (128 bins),class_35,8.55,⚠️ Tin cậy thấp
 1-105224-A-22.wav_cnn_128_class_35_0.0855,24/11/2026,19:01:46,1-105224-A-22.wav,CNN (128 bins),class_35,8.55,⚠️ Tin cậy thấp
